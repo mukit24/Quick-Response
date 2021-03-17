@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 {% load static %}
-
+{% load socialaccount %}
 <head>
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -214,9 +214,9 @@
     <strong class="pr-4">Wanna Join Us?</strong>
     <a href="{% url 'account_signup' %}"><button class="btn btn-success btn-sm ">Sign Up</button></a>
     <a href="{% url 'account_login' %}"><button class="btn btn-primary btn-sm ">Login</button></a>
-    <a href=""><button class="btn btn-info btn-sm "><i class="fa fa-facebook-official" style="font-size: 20px;"></i> Sign Up Using Facebook</button></a>
-    <a href=""><button class="btn btn-dark btn-sm "><i class="fa fa-google" style="font-size: 20px;"></i> Sign Up Using Google</button></a>
-    <a href=""><button class="btn btn-secondary btn-sm "><i class="fa fa-linkedin-square" style="font-size: 20px;"></i> Sign Up Using Linkedin</button></a>
+    <!-- <a href=""><button class="btn btn-info btn-sm "><i class="fa fa-facebook-official" style="font-size: 20px;"></i> Sign In Using Facebook</button></a> -->
+    <a href="{% provider_login_url 'google' %}"><button class="btn btn-dark btn-sm "><i class="fa fa-google" style="font-size: 20px;"></i> Sign In Using Google</button></a>
+    <a href="{% provider_login_url 'github' %}"><button class="btn btn-secondary btn-sm "><i class="fa fa-github" style="font-size: 20px;"></i> Sign In Using Github</button></a>
   </div>
   {% endif %}
   <footer>
