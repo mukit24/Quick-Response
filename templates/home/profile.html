@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="text-dark" style="background-color: rgb(182, 202, 171);">
+    <div class="container p-2">
+        {% if profile %}
+        <div class="text-center">
+            <h3><span class="badge badge-primary">Profile</h3>
+        </div>
+        <div class="text-center bg-dark text-light mb-2 profile_data">
+            <div class="row">
+                <div class="col-lg-4 p-3">
+                    <img src="{{profile.profile_picture.url}}" style="object-fit: cover;" height="100px"
+                        width="100px" />
+                    <h6 class="alert alert-success m-2 py-1 font-weight-bold">User: {{profile.user.username}}</h6>
+                    <h6 class="alert alert-danger m-2 py-1 font-weight-bold">Points: <span
+                            class="badge badge-danger">{{profile.total_points}}</span></h6>
+                    <h5><span class="badge badge-warning">#1 Rank</span></h5>
+                </div>
+                <div class="col-lg-4 p-3 text-md-left">
+                    <h6>Full Name: <span style="color: silver;">{{profile.full_name}}</span>
+                    </h6>
+                    <h6>Student Id: <span style="color: silver;">{{profile.student_id}}</span>
+                    </h6>
+                    <h6>Batch: <span style="color: silver;">{{profile.batch}}</span>
+                    </h6>
+                    <h6>Address: <span style="color: silver;">{{profile.address}}</span>
+                    </h6>
+                    <h6>Mobile No: <span style="color: silver;">{{profile.mobile}}</span>
+                    </h6>
+                    <h6>Email: <span style="color: silver;">{{profile.user.email}}</span>
+                    </h6>
+                    <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#myModal">Edit Profile</button>
+                    <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal1">Change Password</button>
+                </div>
+                <div class="col-lg-4 p-3 text-center">
+                    <h5><span class="badge badge-secondary p-2 mb-1">Problem Status</span></h5>
+                    <h6 class="alert alert-primary py-1 mr-2 font-weight-bold">Total Problems:  <span class="badge badge-primary">5</span></h6>
+                    <h6 class="alert alert-success py-1 mr-2 font-weight-bold">Solved Problems:  <span class="badge badge-success">5</span></h6>
+                    <h6 class="alert alert-danger py-1 mr-2 font-weight-bold">Unsolved Problems:  <span class="badge badge-danger">5</span></h6>
+                    <a href=""><button class="btn btn-danger btn-sm">View Problems</button></a>
+                </div>
+            </div>
+        </div>
+
+        {% else %}
+        <h3 class="text-center"><span class="badge badge-danger">Complete Profile</span></h3>
+        <div class="row h-100 justify-content-center">
+            <div class="col-10 col-md-7 col-lg-5">
+                <form action="{% url 'profile_view' request.user.id %}" enctype="multipart/form-data" method="POST"
+                    style="font-weight: 600;">
+                    {% csrf_token %}
+                    {{form}}
+                    <input type="submit" value="Submit" class="btn btn-success mt-2">
+                </form>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+<div class="modal fade" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content bg-dark text-light">
+            <div class="modal-header">
+                <h5 class="modal-title font-weight-bold text-info">Edit Profile</h5>
+                <button type="button" class="close text-light" data-dismiss="modal">&times;</button>
+            </div>
+
+            <div class="modal-body">
+                <form action="{% url 'update_profile' request.user.id %}" method="POST">
+                    {% csrf_token %}
+                    {{update_form}}
+                    <button type="submit" class="btn btn-info">Edit</button>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="myModal1">
+    <div class="modal-dialog">
+        <div class="modal-content bg-dark text-light">
+            <div class="modal-header">
+                <h5 class="modal-title font-weight-bold text-primary">Change Password</h5>
+                <button type="button" class="close text-light" data-dismiss="modal">&times;</button>
+            </div>
+
+            <div class="modal-body">
+                <div id="pass_form_errors"></div>
+                <form action="{% url 'change_password' %}" method="POST" id="change_pass">
+                    {% csrf_token %}
+                    {{pass_form}}
+                    <button type="submit" class="btn btn-primary mt-1" id="change_pass_btn">Submit</button>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('#change_pass input').addClass('form-control');
+</script>
+{% endblock %}

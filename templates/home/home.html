@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="jumbotron jumbotron-fluid" style="background: url('/static/images/b.jpg') no-repeat bottom fixed; 
+background-size: cover;min-height: 60vh;margin: 0;">
+<h2 class="text-center text-light font-weight-bold">Welcome To Quick Response</h2>
+<h4 class="text-center text-light">A Modern Educational Platform For Solving Your Problems</h4>
+<div class="text-center">
+    <button class="btn btn-outline-success font-weight-bold">Get Started</button>
+</div>
+</div>
+<div  style="background-color: rgb(182, 202, 171);">
+  <div class="container pt-4 pb-4">
+    <h3 class="text-center font-weight-bold alert alert-success py-1">
+      Quick Response's Activity</h3>
+    <div class="row p-5">
+      <div class="col-6 col-lg-3 my_fade1" style="text-align: center;">
+        <i class="fa fa-question" id="home_icon" style="font-size:36px;color: darkgreen;"></i>
+        <h4 class="pt-2"><strong>Profile of An Alumni</strong>
+        </h4>
+        <p style="font-size: large;">Each alumni is given a profile with necessary information.</p>
+      </div>
+      <div class="col-6 col-lg-3 my_fade1" style="text-align: center;">
+        <i class="fa fa-pencil" id="home_icon" style="font-size:36px;color: darkgreen;"></i>
+        <h4 class="pt-2"><strong>Searching For ALumni</strong>
+        </h4>
+        <p style="font-size: large;">One can search for other alumni details with some keys.</p>
+      </div>
+      <div class="col-6 col-lg-3 my_fade2" style="text-align: center;">
+        <i class="fa fa-star" id="home_icon" style="font-size:36px;color: darkgreen;"></i>
+        <h4 class="pt-2"><strong>Events For Helping</strong>
+        </h4>
+        <p style="font-size: large;">Alumni can contribute on different events that are running on varsity</p>
+      </div>
+      <div class="col-6 col-lg-3 my_fade2" style="text-align: center;">
+        <i class="fa fa-group" id="home_icon" style="font-size:36px;color: darkgreen;"></i>
+        <h4 class="pt-2"><strong>Events For Helping</strong>
+        </h4>
+        <p style="font-size: large;">Alumni can contribute on different events that are running on varsity</p>
+      </div>
+    </div>    
+  </div>
+</div>
+{% endblock %}

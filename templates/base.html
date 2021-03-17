@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quick Response</title>
+  <link rel="icon" href="{% static 'images/logo.png' %}" type="image/icon type" />
+
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+
+  <!-- jQuery library -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+  <!-- Popper JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+  <!-- Latest compiled JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+
+  <link rel="stylesheet" href="{% static 'style.css' %}" />
+  <script src="{% static 'main.js' %}"></script>
+
+  <style>
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    .my_font {
+      font-family: "Courier New", Courier, monospace;
+    }
+
+    .btn {
+      font-weight: 600;
+    }
+
+    #search_bar {
+      display: none;
+      margin-right: 5px;
+    }
+
+    #search_bar_sm {
+      display: none;
+    }
+
+    .my_fade1 {
+      opacity: 0;
+      left: -50px;
+    }
+
+    .my_fade2 {
+      opacity: 0;
+      right: -50px;
+    }
+
+    #slide_noti {
+      width: 300px;
+      height: 100%;
+      position: fixed;
+      right: 0;
+      border-top: 1px grey solid;
+      display: none;
+      z-index: 1;
+    }
+
+    /* my_side_nav */
+    #my_side_nav {
+      border-top: 1px grey solid;
+      height: 100%;
+      width: 0;
+      position: fixed;
+      left: 0;
+      overflow-x: hidden;
+      transition: 0.5s;
+      z-index: 1;
+    }
+
+    #my_side_nav a {
+      padding: 6px;
+      text-decoration: none;
+      font-size: 17px;
+      color: #818181;
+      display: block;
+      transition: 0.3s;
+    }
+
+    .open_nav {
+      padding: 30px;
+    }
+
+    #my_side_nav a:hover {
+      color: #f1f1f1;
+    }
+
+    .active_menu{
+      color: #f1f1f1;
+    }
+    #auth_alert{
+      position: fixed;
+      bottom: 0px;
+      width: 100%;
+      z-index: 1;
+      margin-bottom: 0;
+      text-align: center;
+    }
+
+    .profile_data h5,h6{
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    /* #home_icon{
+        animation-name: icon_rot;
+        animation-duration: 2s;
+        animation-delay: 2s;
+        animation-timing-function: ease-out;
+        animation-iteration-count: infinite;
+    }
+
+    @keyframes icon_rot {
+    0%   {transform: rotate(0deg) }
+    100% {transform: rotate(360deg) }
+    } */
+  </style>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-sm bg-dark navbar-dark sticky-top">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a class="navbar-brand text-light" href="#" data-toggle="tooltip" title="Menu" id="menu_btn"><i
+            class="fa fa-reorder" id="menu_icon"></i></a>
+      </li>
+    </ul>
+
+    <ul class="navbar-nav m-auto">
+      <li class="nav-item">
+        <a class="navbar-brand" href="{% url 'home_view' %}" style="font-weight: 600"><img src="{% static 'images/logo.png' %}" alt="Logo"
+            style="width: 33px" /><span style="
+                color: rgb(238, 228, 163);
+                font-family: 'Courier New', Courier, monospace;
+                font-size: larger;
+              ">Quick</span><span style="color: lightgreen; font-family: cursive">
+            Response</span></a>
+      </li>
+    </ul>
+
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <a class="navbar-brand text-light" id="noti" href="#" data-toggle="tooltip" title="Notification"><i
+            class="fa fa-bell text-info"></i><sup class="badge badge-success" style="padding: 2px">0</sup></a>
+      </li>
+      <li class="nav-item">
+        <div id="search_bar">
+          <form class="form-inline" action="/action_page.php">
+            <input class="form-control mr-1" type="text" placeholder="Search" />
+            <button class="btn btn-success" type="submit">Search</button>
+          </form>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a class="navbar-brand text-light" href="#" data-toggle="tooltip" title="Search" id="search_btn"><i
+            class="fa fa-search"></i></a>
+      </li>
+    </ul>
+  </nav>
+  <div id="my_side_nav" class="bg-dark">
+    {% with request.resolver_match.url_name as url_name %}
+    <a href="{% url 'home_view' %}" class="{% if url_name == 'home_view' %}text-light font-weight-bold{% endif %}">Home</a>
+    <a href="#">Problems</a>
+    <a href="#">Points</a>
+    {% endwith %}
+    {% if request.user.is_authenticated %}
+    <a href="{% url 'profile_view' request.user.id %}" class="text-success" style="font-weight: 600;">{{request.user}}</a>
+    <a href="{% url 'account_logout' %}"><button class="btn btn-danger btn-sm py-0 text-light">Logout</button></a>
+    {% else %}
+    <a href="{% url 'account_signup' %}"><button class="btn btn-primary btn-sm py-0 text-light">Sign Up</button></a>
+    <a href="{% url 'account_login' %}" ><button class="btn btn-success btn-sm py-0 text-light">Login</button></a>
+    {% endif %} 
+  </div>
+  <div id="search_bar_sm" class="bg-dark p-2">
+    <form class="form-inline" action="/action_page.php">
+      <input class="form-control mr-1" type="text" placeholder="Search" />
+      <button class="btn btn-success" type="submit">Search</button>
+    </form>
+  </div>
+  <div id="slide_noti" class="p-2 bg-dark text-light">
+    <div class="text-center">
+      <button class="btn btn-info m-2 font-weight-bold py-1">
+        Notifications <span class="badge badge-success">0</span>
+      </button>
+    </div>
+    <p>
+      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ipsa quae
+      autem itaque porro doloribus cumque et laboriosam, non reprehenderit!
+      Reiciendis neque autem totam dolores, necessitatibus illo repellat
+      expedita assumenda quasi?<button class="btn btn-success btn-sm">
+        Load More</button><span id="more_noti">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Possimus
+        culpa consectetur blanditiis deserunt optio harum qui amet similique
+        quod! Doloribus obcaecati itaque fuga laboriosam! Fuga officia culpa
+        rerum? Ipsam, iste.</span>
+    </p>
+  </div>
+  <div id="main_content">{% block content %}{% endblock %}</div>
+  {% if not request.user.is_authenticated %}
+  <div class="alert alert-secondary alert-dismissible" id="auth_alert">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <strong class="pr-4">Wanna Join Us?</strong>
+    <a href="{% url 'account_signup' %}"><button class="btn btn-success btn-sm ">Sign Up</button></a>
+    <a href="{% url 'account_login' %}"><button class="btn btn-primary btn-sm ">Login</button></a>
+    <a href=""><button class="btn btn-info btn-sm "><i class="fa fa-facebook-official" style="font-size: 20px;"></i> Sign Up Using Facebook</button></a>
+    <a href=""><button class="btn btn-dark btn-sm "><i class="fa fa-google" style="font-size: 20px;"></i> Sign Up Using Google</button></a>
+    <a href=""><button class="btn btn-secondary btn-sm "><i class="fa fa-linkedin-square" style="font-size: 20px;"></i> Sign Up Using Linkedin</button></a>
+  </div>
+  {% endif %}
+  <footer>
+    <div class="container text-center text-md-left mt-5" id="main_content">
+      <div class="row mt-3">
+        <div class="col-md-4 col-lg-4 col-xl-4 mx-auto mb-4" style="font-weight: 600">
+          <h6 class="text-uppercase font-weight-bold">Services</h6>
+          <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style="width: 60px" />
+          <p>Data Store Of Alumni</p>
+          <p>University Notice</p>
+          <p>Social Media Purpose</p>
+          <p>Image Gallery</p>
+        </div>
+        <div class="col-md-4 col-lg-4 col-xl-4 mx-auto mb-4">
+          <h6 class="text-uppercase font-weight-bold">Useful links</h6>
+          <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style="width: 60px" />
+          <p>
+            <a href="#!">Khulna University</a>
+          </p>
+          <p>
+            <a href="#!">Facebook</a>
+          </p>
+          <p>
+            <a href="#!">Linkdin</a>
+          </p>
+          <p>
+            <a href="#!">Instragram</a>
+          </p>
+        </div>
+        <div class="col-md-4 col-lg-4 col-xl-4 mx-auto mb-md-0 mb-4" style="font-weight: 600">
+          <h6 class="text-uppercase font-weight-bold">Contact</h6>
+          <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style="width: 60px" />
+          <p>
+            <a href="mailto:mukithasanpranto4@gmail.com">mukithasanpranto4@gmail.com</a>
+          </p>
+          <p>+880 1980492420</p>
+        </div>
+      </div>
+    </div>
+    <div class="footer-copyright text-center text-light pt-3 bg-dark" style="font-weight: 600;padding-bottom: 60px;">
+      © 2021 Copyright:
+      <a href="{% url 'home_view' %}" style="font-weight: 700"> Quick-Response.com</a>
+    </div>
+  </footer>
+  <script>
+    $(document).ready(function () {
+      $("#noti").click(function (e) {
+        e.preventDefault();
+        $("#slide_noti").slideToggle(500);
+        $("#slide_noti").toggleClass("expand");
+        if ($("#slide_noti").hasClass("expand")) {
+          $("#main_content").css({ marginRight: "300px" });
+        } else {
+          $("#main_content").css({ marginRight: "0" });
+        }
+      });
+    });
+
+    $(document).ready(function () {
+      $("#menu_btn").click(function (e) {
+        e.preventDefault();
+        if ($("#my_side_nav").hasClass("open_nav")) {
+          $("#my_side_nav").css({ width: "0" }).removeClass("open_nav");
+          $('#menu_icon').removeClass('fa fa-remove').addClass('fa fa-reorder');
+          $("#main_content").css({ marginLeft: "0" });
+        } else {
+          $("#my_side_nav").css({ width: "180px" }).addClass("open_nav");
+          $('#menu_icon').removeClass('fa fa-reorder').addClass('fa fa-remove');
+          $("#main_content").css({ marginLeft: "180px" });
+        }
+      });
+    });
+  </script>
+  {% include "ajax.html" %}
+</body>
+
+</html>
