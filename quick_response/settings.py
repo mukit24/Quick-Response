@@ -44,8 +44,19 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.github',
     # 'allauth.socialaccount.providers.facebook',
+    'ckeditor',
+    'ckeditor_uploader',
     'home',
+    'problems',
 ]
+
+CKEDITOR_UPLOAD_PATH = 'uploads/'
+
+CKEDITOR_CONFIGS = {
+'default': {
+    'width': 'auto',
+    },
+}
 
 SOCIALACCOUNT_PROVIDERS = {
     'google': {

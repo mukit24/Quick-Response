@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="bg-light" id="post_section">
+    <div class="container">
+        <div id="create_post">
+            <div class="text-center">
+                <button class="btn btn-primary py-1 m-1" id="publish_problem_btn">Publish Your Problem</button>
+                <div class="custom-control custom-switch d-inline-block" >
+                    <input type="checkbox" class="custom-control-input" id="dark_mode">
+                    <label class="custom-control-label" for="dark_mode" style="font-weight: 600;">Dark Mode</label>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-lg-9">
+                    <form action="" method="POST" class="p-2" id="post_form" style="font-weight: 600;">
+                        {% csrf_token %}
+                        {{post_form.media}}
+                        {{post_form}}
+                        <input type="submit" value="Publish" class="btn btn-success btn-sm mt-1">
+                    </form>
+                </div>
+            </div>
+            <hr class="bg-info">
+        </div>
+        <div id="post_list">
+
+        </div>
+    </div>
+</div>
+{% endblock %}
