@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     # 'allauth.socialaccount.providers.facebook',
     'ckeditor',
     'ckeditor_uploader',
+    
     'home',
     'problems',
 ]

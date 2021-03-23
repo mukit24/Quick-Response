@@ -28,11 +28,6 @@ $(document).ready(function () {
             var bottom_of_object = $(this).position().top + $(this).outerHeight();
             var bottom_of_window = $(window).scrollTop() + $(window).height();
             var topp = $(this).position().top;
-            // console.log(bottom_of_object+' '+bottom_of_window+' '+topp+' '+$(window).scrollTop())
-            // if(bottom_of_window > bottom_of_object+$(window).height()){
-            //     $(this).animate({ 'opacity': '.4','left':'0px', }, 1200);
-            // }
-            // console.log(bottom_of_object+' '+bottom_of_window+' '+$(window).scrollTop())
             if (bottom_of_window > bottom_of_object) {
                 $(this).animate({ 'opacity': '1','left':'0px', }, 1200);
     
@@ -53,3 +48,4 @@ $(document).ready(function () {
     });
 
 });
+            
