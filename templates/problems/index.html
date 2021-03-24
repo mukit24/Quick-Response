@@ -1,6 +1,4 @@
-{% extends "base.html" %}
-{% load static %} 
-{% block content %}
+{% extends "base.html" %} {% load static %} {% block content %}
 <div class="bg-light" id="post_section">
     <div class="container">
         <div id="create_post">
@@ -17,24 +15,132 @@
                 <div class="col-lg-9">
                     <form action="{% url 'create_problem' %}" method="POST" class="p-2" id="post_form"
                         style="font-weight: 400">
-                        {% csrf_token %} 
-                        {{post_form.media}} 
-                        {{post_form}}
+                        {% csrf_token %} {{post_form.media}} {{post_form}}
                         <input type="submit" value="Publish" class="btn btn-success btn-sm mt-1" />
                     </form>
                 </div>
             </div>
         </div>
         <div id="post_list">
-            <h4 class="text-center alert alert-primary font-weight-bold py-1">
+            <h4 class="text-center alert alert-primary font-weight-bold py-1 mb-2">
                 Top Problems
             </h4>
+            <div class="text-right" style="overflow-x: auto">
+                <div class="btn-group btn-group-sm">
+                    {% with request.resolver_match.url_name as url_name %}
+                    <a href="{% url 'prob_home' %}" class="{% if url_name == 'prob_home' %}btn btn-info btn-sm{% else %}btn btn-outline-info btn-sm{% endif %}">
+                        Latest
+                </a>
+                    <a href="{% url 'sort_oldest' %}" class="{% if url_name == 'sort_oldest' %}btn btn-info btn-sm{% else %}btn btn-outline-info btn-sm{% endif %}">
+                            Oldest
+                    </a>
+                    <a href="{% url 'sort_unsolved' %}" class="{% if url_name == 'sort_unsolved' %}btn btn-info btn-sm{% else %}btn btn-outline-info btn-sm{% endif %}">
+                        Unsolved
+                </a>
+                <a href="{% url 'sort_solved' %}" class="{% if url_name == 'sort_solved' %}btn btn-info btn-sm{% else %}btn btn-outline-info btn-sm{% endif %}">
+                    Solved
+            </a>
+                    <button type="button" class="btn btn-outline-info btn-sm">
+                        Less Solution
+                    </button>
+                    <button type="button" class="btn btn-outline-info btn-sm">
+                        More Solution
+                    </button>
+                    <button type="button" class="{% if url_name == 'sort_tag' %}btn btn-info btn-sm{% else %}btn btn-outline-info btn-sm{% endif %}" data-toggle="modal"
+                        data-target="#tag_modal">
+                        Tag
+                    </button>
+                    {% endwith %}
+                </div>
+            </div>
+            <div class="modal fade" id="tag_modal">
+                <div class="modal-dialog">
+                    <div class="modal-content bg-dark text-light">
+                        <!-- Modal Header -->
+                        <div class="modal-header">
+                            <h4 class="modal-title font-weight-bold">Select Tag</h4>
+                            <button type="button" class="close" data-dismiss="modal">
+                                &times;
+                            </button>
+                        </div>
+
+                        <!-- Modal body -->
+                        <div class="modal-body">
+                            <input class="form-control mb-1" id="search_tag_input" type="text"
+                                placeholder="Search For Tag..." />
+                            <form action="{% url 'sort_tag' %}" method="POST" id="tag_list_form">
+                                {% csrf_token %}
+                                <div id="tag_list_modal" style="height: 200px; overflow-y: scroll">
+                                    {% for tag in tags %}
+                                    <div class="form-check">
+                                        <label class="form-check-label" for="check1">
+                                            <input type="checkbox" class="form-check-input" id="check1"
+                                                name="tag_choice" value="{{tag.name}}" />{{tag.name}}
+                                        </label>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                                <input type="submit" class="btn btn-success btn-sm mt-2" value="Submit">
+                            </form>
+                            <script>
+                                $(document).ready(function () {
+                                    $("#search_tag_input").on("keyup", function () {
+                                        var value = $(this).val().toLowerCase();
+                                        $("#tag_list_modal label").filter(function () {
+                                            $(this).toggle(
+                                                $(this).text().toLowerCase().indexOf(value) > -1
+                                            );
+                                        });
+                                    });
+
+                                    $("#tag_list_modal label")
+                                        .find("input[type=checkbox]")
+                                        .click(function () {
+                                            if ($(this).prop("checked") == true) {
+                                                var value = $(this).parent().text();
+                                                $("#search_tag_input").before(
+                                                    '<h6 class="d-inline-block mx-1"><span class="badge badge-info">' +
+                                                    value +
+                                                    "</span></h6>"
+                                                );
+                                            } else {
+                                                console.log('test');
+                                                var value = $(this).parent().text();
+                                                console.log(value)
+                                                $("#tag_list_form")
+                                                    .siblings("h6")
+                                                    .each(function () {
+                                                        console.log($(this).text());
+                                                        if ($(this).text() == value) {
+                                                            $(this).remove();
+                                                        }
+                                                    });
+                                            }
+                                        });
+                                });
+                            </script>
+                        </div>
+
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% if not problems %}
+            <h5 class="alert alert-danger text-center my-2">Sorry!!! No Problems Found.</h5>
+            {% endif %}
             {% for problem in problems %}
             <div class="row">
                 <div class="col-lg-3">
                     <div class="row text-center">
                         <div class="col-6">
-                            <h6 style="border-bottom: 1px solid grey">Status</h6>
+                            <h6 style="border-bottom: 1px solid grey; margin: 0px 25px">
+                                Status
+                            </h6>
                             {% if problem.is_solved %}
                             <button class="btn btn-success btn-sm py-0">Solved</button>
                             {% else %}
@@ -42,7 +148,9 @@
                             {% endif %}
                         </div>
                         <div class="col-6">
-                            <h6 style="border-bottom: 1px solid grey">Solutions</h6>
+                            <h6 style="border-bottom: 1px solid grey; margin: 0px 15px">
+                                Solutions
+                            </h6>
                             <button class="btn btn-warning btn-sm py-0">4</button>
                         </div>
                     </div>
@@ -52,7 +160,7 @@
               text-decoration: none;
               font-weight: 500;
               font-size: large;
-              display: block;
+              display: inline-block;
             ">{{problem.title}}</a>
                     <div class="row">
                         <div class="col-7 text-left">
