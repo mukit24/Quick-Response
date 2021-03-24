@@ -179,9 +179,9 @@
   <div id="my_side_nav" class="bg-dark">
     {% with request.resolver_match.url_name as url_name %}
     <a href="{% url 'home_view' %}"
-      class="{% if url_name == 'home_view' %}text-light font-weight-bold{% endif %}">Home</a>
+      class="{% if url_name == 'home_view' %}text-light{% endif %}">Home</a>
     <a href="{% url 'prob_home' %}"
-      class="{% if url_name == 'prob_home' %}text-light font-weight-bold{% endif %}">Problems</a>
+      class="{% if 'problems' in request.path %}text-light{% endif %}">Problems</a>
     <a href="#">Points</a>
     {% endwith %} {% if request.user.is_authenticated %}
     <a href="{% url 'profile_view' request.user.id %}" class="text-success"

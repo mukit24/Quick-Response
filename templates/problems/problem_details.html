@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load static %} 
+{% block content %}
+<div style="background-color: whitesmoke;" id="post_section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-9 p-2">
+                <h5 class="text-center">{{problem.title}}</h5>
+                <div class="row text-center">
+                    <div class="col-lg-4">
+                        <h6 style="font-size: small;">Published By: <a href="" style="text-decoration: none;">{{problem.author}}</a></h6>
+                    </div>
+                    <div class="col-lg-4">
+                        <h6 style="font-size: small;">Published At {{problem.created_on}}</h6>
+                    </div>
+                    <div class="col-lg-4">
+                        {% if problem.is_solved %}
+                        <h6 style="font-size: small;">Status: <span class="text-success font-weight-bold">Solved</span></h6>
+                        {% else %}
+                        <h6 style="font-size: small;">Status: <span class="text-danger font-weight-bold">Unsolved</span></h6>
+                        {% endif %}
+                    </div>
+                </div>
+                <p>{{problem.body|safe}}</p>
+                <hr>
+                {% for tag in problem.tag.all %}
+                <h6 class="d-inline-block">
+                    <span class="badge badge-secondary p-1">{{tag.name}}</span>
+                </h6>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

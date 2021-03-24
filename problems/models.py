@@ -12,7 +12,7 @@ class Tag(models.Model):
 
 class Problem(models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
-    title = models.CharField(max_length=60)
+    title = models.CharField(max_length=120)
     body = RichTextUploadingField()
     created_on = models.DateTimeField(default=datetime.now)
     last_modified = models.DateTimeField(default=datetime.now)

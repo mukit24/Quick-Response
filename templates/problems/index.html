@@ -1,15 +1,15 @@
 {% extends "base.html" %} {% load static %} {% block content %}
-<div class="bg-light" id="post_section">
+<div style="background-color: whitesmoke;" id="post_section">
     <div class="container">
         <div id="create_post">
             <div class="text-right">
                 <button class="btn btn-primary py-1 m-1" id="publish_problem_btn">
                     Publish A Problem
                 </button>
-                <div class="custom-control custom-switch d-inline-block">
+                <!-- <div class="custom-control custom-switch d-inline-block">
                     <input type="checkbox" class="custom-control-input" id="dark_mode" />
                     <label class="custom-control-label" for="dark_mode" style="font-weight: 600">Dark Mode</label>
-                </div>
+                </div> -->
             </div>
             <div class="row justify-content-center">
                 <div class="col-lg-9">
@@ -156,7 +156,7 @@
                     </div>
                 </div>
                 <div class="col-lg-9">
-                    <a href="" style="
+                    <a href="{% url 'problem_details' problem.id %}" style="
               text-decoration: none;
               font-weight: 500;
               font-size: large;
@@ -172,7 +172,7 @@
                         </div>
                         <div class="col-5 text-right">
                             <h6 style="font-size: small">
-                                Published At {{problem.created_on}}
+                                Published At {{problem.created_on}} By <a style="text-decoration: none;" href=''>{{problem.author}}</a>
                             </h6>
                         </div>
                     </div>
@@ -181,6 +181,28 @@
             <hr class="bg-info my-2" />
             {% endfor %}
         </div>
+
+        {% if problems.has_other_pages %}
+        <div>
+            <ul class="pagination justify-content-center p-2">
+                {% if problems.has_previous %}
+                <li class="page-item"><a class="page-link bg-secondary text-light"
+                        href="?page={{ problems.previous_page_number }}">Previous</a></li>
+                {% endif %}
+                {% for i in problems.paginator.page_range %}
+                {% if problems.number == i %}
+                <li class="page-item active"><a class="page-link" href="?page={{ i }}">{{i}}</a></li>
+                {% else %}
+                <li class="page-item"><a class="page-link bg-dark text-light" href="?page={{ i }}">{{i}}</a></li>
+                {% endif %}
+                {% endfor %}
+                {% if problems.has_next %}
+                <li class="page-item"><a class="page-link bg-secondary text-light"
+                        href="?page={{ problems.next_page_number }}">Next</a></li>
+                {% endif %}
+            </ul>
+        </div>
+        {% endif %}
     </div>
 </div>
 {% endblock %}

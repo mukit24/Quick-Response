@@ -30,12 +30,14 @@
 
   //publish problem
   // $('#post_form').submit(function(e){
+  //   e.preventDefault();
+  //   for (var instance in CKEDITOR.instances)
+  //     CKEDITOR.instances[instance].updateElement();
   //   $.ajax({
-  //     url: "",
-  //     method: "",
-  //     data: "",
+  //     url: "{% url 'create_problem' %}",
+  //     method: "POST",
+  //     data: $(this).serialize(),
   //     success: function(data){
-  //       e.preventDefault();
   //       console.log(data);
   //     }
   //   })
