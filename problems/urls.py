@@ -1,5 +1,5 @@
 from django.urls import path,include
-from .views import prob_home,create_problem,problem_details
+from .views import prob_home,create_problem,problem_details,comment
 urlpatterns = [
     path('',prob_home,name='prob_home'),
     path('create/',create_problem,name='create_problem'),
@@ -8,4 +8,6 @@ urlpatterns = [
     path('unsolved/',prob_home,name='sort_unsolved'),
     path('solved/',prob_home,name='sort_solved'),
     path('tag/',prob_home,name='sort_tag'),
+    path('<int:id>/comment_problem/',comment,name='comment_problem'),
+
 ]

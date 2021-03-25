@@ -363,6 +363,9 @@
         });
 
         $('#id_tag').prevAll().eq(1).addClass('d-block').text('Tag (Selecet One or More):');
+        $('#cmt_btn').click(function(){
+          $('#cmt_form_p').toggle();
+        })
     });
   </script>
   {% include "ajax.html" %}

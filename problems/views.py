@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from .forms import PostForm
+from .forms import PostForm,SolutionForm,CommentForm
 from django.http import JsonResponse
 from .models import Problem,Tag
 from django.core.paginator import Paginator
@@ -87,10 +87,38 @@ def create_problem(request):
 
 def problem_details(request,id):
     problem = Problem.objects.get(id=id)
+    sol_form = SolutionForm()
+    cmt_form = CommentForm()
+    
     context = {
         'problem':problem,
+        'sol_form':sol_form,
+        'cmt_form':cmt_form,
     }
     return render(request,"problems/problem_details.html",context)
+
+
+def comment(request,id):
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if request.resolver_match.url_name == 'comment_problem':
+            problem = Problem.objects.get(id=id)
+            if form.is_valid():
+                new_cmt = form.save(commit=False)
+                new_cmt.author = request.user
+                new_cmt.problem = problem
+                new_cmt.save()
+                form.save_m2m()
+
+                data = {
+                'id':new_cmt.id,
+                'c_body':new_cmt.c_body,
+                'author':new_cmt.author.username,
+                'date':new_cmt.created_on,
+                }
+                return JsonResponse({'comment_data':data,'status':'success'})
+        else:
+            pass
 
 
 

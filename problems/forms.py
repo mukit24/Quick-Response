@@ -1,5 +1,5 @@
 from django import forms
-from .models import Problem,Tag
+from .models import Problem,Tag,Solution,Comment
 
 class PostForm(forms.ModelForm):
     class Meta:
@@ -31,3 +31,30 @@ class PostForm(forms.ModelForm):
                 self.fields[field].widget.attrs.update({
                 'class': 'form-control mb-1'
     })
+
+
+class SolutionForm(forms.ModelForm):
+    class Meta:
+        model = Solution
+        fields = [
+            "body"
+        ]
+        
+        labels = {
+            "body": "",
+        }
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = [
+            "c_body",
+        ]
+
+        widgets = {
+            'c_body': forms.Textarea(attrs={'rows':1,'class':'form-control','placeholder':'Leave A Comment!'}),
+        }
+
+        labels = {
+            "c_body": "",
+        }
