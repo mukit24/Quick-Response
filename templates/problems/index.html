@@ -16,7 +16,7 @@
                     <form action="{% url 'create_problem' %}" method="POST" class="p-2" id="post_form"
                         style="font-weight: 400">
                         {% csrf_token %} {{post_form.media}} {{post_form}}
-                        <input type="submit" value="Publish" class="btn btn-success btn-sm mt-1" />
+                        <input type="submit" value="Publish" class="btn btn-success btn-sm my-1" />
                     </form>
                 </div>
             </div>
@@ -133,8 +133,9 @@
             {% if not problems %}
             <h5 class="alert alert-danger text-center my-2">Sorry!!! No Problems Found.</h5>
             {% endif %}
-            {% for problem in problems %}
-            <div class="row">
+            <div id="problem_list" class="pt-2">
+                {% for problem in problems %}
+            <div class="row p-1">
                 <div class="col-lg-3">
                     <div class="row text-center">
                         <div class="col-6">
@@ -180,6 +181,7 @@
             </div>
             <hr class="bg-info my-2" />
             {% endfor %}
+            </div>
         </div>
 
         {% if problems.has_other_pages %}

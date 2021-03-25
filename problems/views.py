@@ -4,6 +4,8 @@ from django.http import JsonResponse
 from .models import Problem,Tag
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
+from django.core import serializers
+from django.forms.models import model_to_dict
 
 # Create your views here.
 def prob_home(request):
@@ -11,6 +13,26 @@ def prob_home(request):
     post_form = PostForm()
     tags = Tag.objects.all().order_by('name')
     
+    temp = Problem.objects.first()
+    # tags = []
+    # for x in temp.tag.all():
+    #     tags.append(x.name)
+    # data = {
+    #     'name':temp.title,
+    #     'tags':tags,
+    # }
+    # print(data)
+    # print(model_to_dict(temp))
+    # seri = {
+    #     'title':temp.title,
+    #     'author':temp.author.username,
+    # }
+    # print(seri)
+    # a_seri = {
+    #     'data':dict(temp),
+    # }
+    # print(a_seri)
+    # print(seri['title'])
 
     if request.resolver_match.url_name == 'sort_oldest':
         problems = Problem.objects.all().order_by('created_on')
@@ -46,9 +68,21 @@ def create_problem(request):
             new_post.author = request.user
             new_post.save()
             post_form.save_m2m()
-            return redirect('prob_home') 
+            tags = []
+            for x in new_post.tag.all():
+                tags.append(x.name)
+            data = {
+                'id':new_post.id,
+                'title':new_post.title,
+                'author':new_post.author.username,
+                'is_solved':new_post.is_solved,
+                'tags':tags,
+                'date':new_post.created_on,
+            }
+            return JsonResponse({'problem_data':data,'status':'success'}) 
         else:
-            return redirect('prob_home')
+            print(post_form.errors)
+            return JsonResponse(dict(post_form.errors.items()))
 
 
 def problem_details(request,id):
