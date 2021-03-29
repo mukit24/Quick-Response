@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from .forms import PostForm,SolutionForm,CommentForm
 from django.http import JsonResponse
-from .models import Problem,Tag
+from .models import Problem,Tag,Comment
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from django.core import serializers
@@ -121,9 +121,29 @@ def comment(request,id):
             pass
 
 
+def delete_comment(request):
+    id = request.GET['sid']
+    cmt = Comment.objects.get(id=id)
+    cmt.delete()
+    return JsonResponse({'status':'success'})
 
 
+def edit_comment(request):
+    if request.method == 'POST':
+        print(request.POST)
+        id = request.POST['cmt_id']
+        cmt = Comment.objects.get(id=id)
+        form = CommentForm(request.POST,instance=cmt)
+        if form.is_valid():
+            form.save()
 
-
-
+            data = {
+            'id':cmt.id,
+            'c_body':cmt.c_body,
+            'author':cmt.author.username,
+            'date':cmt.created_on,
+            }
+            return JsonResponse({'edit_data':data,'status':'success'})
+        else:
+            pass
 

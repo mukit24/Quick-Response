@@ -364,11 +364,31 @@
 
         $('#id_tag').prevAll().eq(1).addClass('d-block').text('Tag (Selecet One or More):');
         $('#cmt_btn').click(function(){
-          $('#cmt_form_p').toggle();
+          $('#cmt_form_p').show().trigger('reset');
+          $('#cmt_btn_cls').show();
+          $('.submit_cmt_p').show();
+          $('.edit_cmt_p').hide();
+        })
+
+        //edit cmt
+        $('#cmt_p_list').on('click','#cmt_edit_open',function(e){
+          e.preventDefault();
+          var cmt_id = $(this).attr('data-sid');
+          $('#cmt_form_p').show();
+          $('#cmt_btn_cls').show();
+          $('.edit_cmt_p').show();
+          $('.submit_cmt_p').hide();
+          var val = $(this).closest('#cmt_content').find('#cmt_body').text();
+          $('#cmt_form_p #cmt_id').val(cmt_id);
+          $('#cmt_form_p textarea').val(val);
+        })
+
+        $('#cmt_btn_cls').click(function(){
+          $('#cmt_btn_cls').hide();
+          $('#cmt_form_p').hide();
         })
     });
   </script>
-  {% include "ajax.html" %}
 </body>
 
 </html>

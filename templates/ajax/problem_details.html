@@ -1,0 +1,65 @@
+<script>
+  // comment
+    $('.submit_cmt_p').click(function(e){
+    e.preventDefault();
+    var form = $(this).closest('form');
+    $.ajax({
+      'url': "{% url 'comment_problem' problem.id %}",
+      'method': "POST",
+      data: $(form).serialize(),
+      success: function (data) {
+        console.log(data);
+        var output,prefix = data.comment_data;
+        console.log(data.comment_data)
+        output = '<div id="cmt_content"><p class="py-1 pl-2 m-0 d-inline"><span id="cmt_body">'+prefix.c_body+'</span> | <a href="" style="text-decoration: none;font-weight: 500;">'+prefix.author+'</a> <span class="text-muted">'+prefix.date+'</span></p><div class="d-inline" style="position: absolute;right: 0;"><a href="" data-toggle="tooltip" title="Delete" id="cmt_dlt_btn" data-sid ='+prefix.id+'><i class="fa fa-trash text-danger"></i></a><a class="ml-1" href="" data-toggle="tooltip" title="Edit" id="cmt_edit_open" data-sid ='+prefix.id+'><i class="fa fa-pencil-square-o text-primary"></i></a></div><hr class="m-0"></div>';
+        console.log(output);
+        $('#cmt_form_p').hide();
+        $(output).hide().appendTo("#cmt_p_list").fadeIn(1000);
+        $('#cmt_btn_cls').hide();
+      }
+    })
+  })
+
+  // delete cmmt
+  $('#cmt_p_list').on('click','#cmt_dlt_btn',function(e){
+    e.preventDefault();
+    var id = $(this).attr('data-sid');
+    my_data = {
+      sid:id,    
+    }
+    var mythis = this;
+
+    $.ajax({
+      method: "GET",
+      url: "{% url 'delete_comment' %}",
+      data: my_data,
+      success: function (data) {
+        $(mythis).closest('#cmt_content').fadeOut(500);
+      }
+    });
+  })
+
+  //edit comment
+  $('.edit_cmt_p').click(function(e){
+    e.preventDefault();
+    var form = $(this).closest('form');
+    $.ajax({
+      'url': "{% url 'edit_comment_problem' %}",
+      'method': "POST",
+      data: $(form).serialize(),
+      success: function (data) {
+        console.log(data);
+        var output = data.edit_data.c_body;
+        var up_cmt = $('#cmt_p_list').find('a[data-sid='+data.edit_data.id+']').closest('#cmt_content').find('#cmt_body');
+
+        $(up_cmt).fadeOut(function() {
+            $(this).text(output).fadeIn();
+        });
+        
+        $('#cmt_btn_cls').hide();
+        $('#cmt_form_p').hide();
+        
+      },
+    })
+  })
+</script>
