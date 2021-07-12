@@ -27,99 +27,7 @@
   <script src="{% static 'main.js' %}"></script>
 
   <style>
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6,
-    .my_font {
-      font-family: "Courier New", Courier, monospace;
-    }
-
-    .btn {
-      font-weight: 600;
-    }
-
-    #search_bar {
-      display: none;
-      margin-right: 5px;
-    }
-
-    #search_bar_sm {
-      display: none;
-    }
-
-    .my_fade1 {
-      opacity: 0;
-      left: -50px;
-    }
-
-    .my_fade2 {
-      opacity: 0;
-      right: -50px;
-    }
-
-    #slide_noti {
-      width: 300px;
-      height: 100%;
-      position: fixed;
-      right: 0;
-      border-top: 1px grey solid;
-      display: none;
-      z-index: 1;
-    }
-
-    /* my_side_nav */
-    #my_side_nav {
-      border-top: 1px grey solid;
-      height: 100%;
-      width: 0;
-      position: fixed;
-      left: 0;
-      overflow-x: hidden;
-      transition: 0.5s;
-      z-index: 1;
-    }
-
-    #my_side_nav a {
-      padding: 6px;
-      text-decoration: none;
-      font-size: 17px;
-      color: #818181;
-      display: block;
-      transition: 0.3s;
-    }
-
-    .open_nav {
-      padding: 30px;
-    }
-
-    #my_side_nav a:hover {
-      color: #f1f1f1;
-    }
-
-    .active_menu {
-      color: #f1f1f1;
-    }
-
-    #auth_alert {
-      position: fixed;
-      bottom: 0px;
-      width: 100%;
-      z-index: 1;
-      margin-bottom: 0;
-      text-align: center;
-    }
-
-    h5,
-    h6 {
-      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    }
-
-    #post_form {
-      display: none;
-    }
+    
 
     /* #home_icon{
         animation-name: icon_rot;
@@ -221,7 +129,6 @@
         rerum? Ipsam, iste.</span>
     </p>
   </div>
-  <div id="main_content">{% block content %}{% endblock %}</div>
   {% if not request.user.is_authenticated %}
   <div class="alert alert-secondary alert-dismissible" id="auth_alert">
     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -283,111 +190,7 @@
     </div>
   </footer>
   <script>
-    $(document).ready(function () {
-      $("#noti").click(function (e) {
-        e.preventDefault();
-        $("#slide_noti").slideToggle(500);
-        $("#slide_noti").toggleClass("expand");
-        if ($("#slide_noti").hasClass("expand")) {
-          $("#main_content").css({ marginRight: "300px" });
-        } else {
-          $("#main_content").css({ marginRight: "0" });
-        }
-      });
-    });
-
-    $(document).ready(function () {
-      $("#menu_btn").click(function (e) {
-        e.preventDefault();
-        if ($("#my_side_nav").hasClass("open_nav")) {
-          $("#my_side_nav").css({ width: "0" }).removeClass("open_nav");
-          $("#menu_icon")
-            .removeClass("fa fa-remove")
-            .addClass("fa fa-reorder");
-          $("#main_content").css({ marginLeft: "0" });
-        } else {
-          $("#my_side_nav").css({ width: "180px" }).addClass("open_nav");
-          $("#menu_icon")
-            .removeClass("fa fa-reorder")
-            .addClass("fa fa-remove");
-          $("#main_content").css({ marginLeft: "180px" });
-        }
-      });
-    });
-
-    $(document).ready(function () {
-      $("#publish_problem_btn").click(function () {
-        $("#post_form").fadeToggle(300);
-      });
-
-      $("#dark_mode").click(function () {
-        $("#post_section").toggleClass("bg-dark text-light");
-      });
-    });
-
-    $(document).ready(function () {
-      $("#id_tag").css({
-        "height": "75px",
-        "overflow-y": "scroll",
-        "list-style-type": "none",
-        "padding-left": "5px",
-      });
-      $("#id_tag").before(
-        '<input class="form-control" id="myInput_tag" type="text" placeholder="Search..">'
-      );
-
-      $("#myInput_tag").on("keyup", function () {
-        var value = $(this).val().toLowerCase();
-        $("#id_tag li").filter(function () {
-          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
-        });
-      });
-
-      $("#id_tag li label")
-        .find("input[type=checkbox]")
-        .click(function () {
-          if ($(this).prop('checked') == true) {
-            var value = $(this).parent().text();
-            $('#myInput_tag').before('<h6 class="d-inline-block mx-1"><span class="badge badge-secondary">'+value+'</span></h6>');
-          }
-          else{
-            var value = $(this).parent().text();
-            // console.log(value);
-            $('#id_tag').siblings('h6').each(function(){
-              // console.log($(this).text());
-              if ($(this).text()==value){
-                $(this).remove();
-              }
-            })
-          }
-        });
-
-        $('#id_tag').prevAll().eq(1).addClass('d-block').text('Tag (Selecet One or More):');
-        $('#cmt_btn').click(function(){
-          $('#cmt_form_p').show().trigger('reset');
-          $('#cmt_btn_cls').show();
-          $('.submit_cmt_p').show();
-          $('.edit_cmt_p').hide();
-        })
-
-        //edit cmt
-        $('#cmt_p_list').on('click','#cmt_edit_open',function(e){
-          e.preventDefault();
-          var cmt_id = $(this).attr('data-sid');
-          $('#cmt_form_p').show();
-          $('#cmt_btn_cls').show();
-          $('.edit_cmt_p').show();
-          $('.submit_cmt_p').hide();
-          var val = $(this).closest('#cmt_content').find('#cmt_body').text();
-          $('#cmt_form_p #cmt_id').val(cmt_id);
-          $('#cmt_form_p textarea').val(val);
-        })
-
-        $('#cmt_btn_cls').click(function(){
-          $('#cmt_btn_cls').hide();
-          $('#cmt_form_p').hide();
-        })
-    });
+    
   </script>
 </body>
 

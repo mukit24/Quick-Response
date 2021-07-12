@@ -130,7 +130,7 @@ def delete_comment(request):
 
 def edit_comment(request):
     if request.method == 'POST':
-        print(request.POST)
+        # print(request.POST)
         id = request.POST['cmt_id']
         cmt = Comment.objects.get(id=id)
         form = CommentForm(request.POST,instance=cmt)
