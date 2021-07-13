@@ -1,5 +1,5 @@
 <script>
-  //publish problem
+// publish problem
   $('#post_form').submit(function (e) {
     e.preventDefault();
     for (var instance in CKEDITOR.instances)
@@ -9,18 +9,12 @@
       method: "POST",
       data: $(this).serialize(),
       success: function (data) {
-        console.log(data)
         if (data["status"] == 'success') {
-          console.log('yooo');
-          console.log(data.problem_data);
-          console.log(data.problem_data.title);
+          console.log('success');
           var i, output, msg, tag_output='', status_output;
-          // for(i in data.problem_data.tags){
-          //   console.log(i);
-          // }
-          msg = '<p class="alert alert-success alert-dismissible font-weight-bold mt-3"><button type="button" class="close" data-dismiss="alert">&times;</button>Successfully Published</p>'
-
-          $(msg).hide().appendTo("#post_form").fadeIn("slow");
+          msg = '<p class="alert alert-success alert-dismissible font-weight-bold"><button type="button" class="close" data-dismiss="alert">&times;</button>Successfully Published</p>'
+          $('#post_form_noti').empty();
+          $(msg).hide().appendTo("#post_form_noti").fadeIn("slow");
 
           if (data.problem_data.is_solved == false) {
             status_output = '<button class="btn btn-danger btn-sm py-0">Unsolved</button>';
@@ -31,23 +25,34 @@
           for (i in data.problem_data.tags) {
             tag_output += '<h6 class="d-inline-block mr-1"><span class="badge badge-secondary">' + data.problem_data.tags[i] + '</span></h6>'
           }
-          
-          output = '<div class="row p-1" style=""><div class="col-lg-3"><div class="row text-center"><div class="col-6"><h6 style="border-bottom: 1px solid grey; margin: 0px 25px">Status</h6>' + status_output + '</div><div class="col-6"><h6 style="border-bottom: 1px solid grey; margin: 0px 15px">Solutions</h6 ><button class="btn btn-warning btn-sm py-0">4</button></div ></div ></div><div class="col-lg-9"><a href="/problems/'+data.problem_data.id+'/details" style="text-decoration: none;font-weight: 500;font-size: large;display: inline-block;">'+data.problem_data.title+'</a><div class="row"><div class="col-7 text-left">'+ tag_output +'</div><div class="col-5 text-right"><h6 style="font-size: small">Published At '+data.problem_data.date+' By <a style="text-decoration: none;" href="">'+data.problem_data.author+'</a></h6></div></div></div></div><hr class="bg-info my-2"/>';
+          my_date = new Date(data.problem_data.date)
+          // console.log(my_date[5])
+          output = '<div class="row p-1" style=""><div class="col-lg-3"><div class="row text-center"><div class="col-6"><h6 style="border-bottom: 1px solid grey; margin: 0px 25px">Status</h6>' + status_output + '</div><div class="col-6"><h6 style="border-bottom: 1px solid grey; margin: 0px 15px">Solutions</h6 ><button class="btn btn-warning btn-sm py-0">4</button></div ></div ></div><div class="col-lg-9"><a href="/problems/'+data.problem_data.id+'/details" style="text-decoration: none;font-weight: 500;font-size: large;display: inline-block;">'+data.problem_data.title+'</a><div class="row"><div class="col-7 text-left">'+ tag_output +'</div><div class="col-5 text-right"><h6 style="font-size: small">Published At '+my_date.toLocaleString('en-US', { day:'numeric',month:'long',year:'numeric',hour: 'numeric', minute: 'numeric', hour12: true })+' By <a style="text-decoration: none;" href="">'+data.problem_data.author+'</a></h6></div></div></div></div><hr class="bg-info my-2"/>';
 
           $(output).hide().prependTo("#problem_list").fadeIn(1500);
+          // $('#post_form').trigger('reset');
+          // CKEDITOR.instances[0] = '';
 
-        }else{
-          console.log(data);
+        }else if(data['status']=='fail'){
+          console.log('fail');
+          $('#post_form_noti').empty();
+          var output = '<p class="alert alert-danger alert-dismissible font-weight-bold"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a> Sorry You Have To Login First</p>';
+          $(output).hide().appendTo("#post_form_noti").fadeIn("slow");
+        }
+        else{
+          console.log('error');
           var i, j;
+          $('#post_form_noti').empty();
           for (i in data) {
             for (j in data[i]) {
               //   console.log(data[i][j]);
               var output = '<p class="alert alert-danger alert-dismissible font-weight-bold"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>' + i+': '+data[i][j] + '</p>';
-              $(output).hide().appendTo("#post_form").fadeIn("slow");
+              $(output).hide().appendTo("#post_form_noti").fadeIn("slow");
             }
           }
         }
       }
     })
   })
-</script>
+
+ </script>

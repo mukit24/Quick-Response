@@ -11,7 +11,8 @@
         console.log(data);
         var output,prefix = data.comment_data;
         console.log(data.comment_data)
-        output = '<div id="cmt_content"><p class="py-1 pl-2 m-0 d-inline"><span id="cmt_body">'+prefix.c_body+'</span> | <a href="" style="text-decoration: none;font-weight: 500;">'+prefix.author+'</a> <span class="text-muted">'+prefix.date+'</span></p><div class="d-inline" style="position: absolute;right: 0;"><a href="" data-toggle="tooltip" title="Delete" id="cmt_dlt_btn" data-sid ='+prefix.id+'><i class="fa fa-trash text-danger"></i></a><a class="ml-1" href="" data-toggle="tooltip" title="Edit" id="cmt_edit_open" data-sid ='+prefix.id+'><i class="fa fa-pencil-square-o text-primary"></i></a></div><hr class="m-0"></div>';
+        my_date = new Date(prefix.date)
+        output = '<div id="cmt_content"><p class="py-1 pl-2 m-0 d-inline"><span id="cmt_body">'+prefix.c_body+'</span> | <a href="" style="text-decoration: none;font-weight: 500;">'+prefix.author+'</a> <span class="text-muted">'+my_date.toLocaleString('en-US', { day:'numeric',month:'long',year:'numeric',hour: 'numeric', minute: 'numeric', hour12: true })+'</span></p><div class="d-inline" style="position: absolute;right: 0;"><a href="" data-toggle="tooltip" title="Delete" id="cmt_dlt_btn" data-sid ='+prefix.id+'><i class="fa fa-trash text-danger"></i></a><a class="ml-1" href="" data-toggle="tooltip" title="Edit" id="cmt_edit_open" data-sid ='+prefix.id+'><i class="fa fa-pencil-square-o text-primary"></i></a></div><hr class="m-0"></div>';
         console.log(output);
         $('#cmt_form_p').hide();
         $(output).hide().appendTo("#cmt_p_list").fadeIn(1000);

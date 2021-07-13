@@ -129,6 +129,7 @@
         rerum? Ipsam, iste.</span>
     </p>
   </div>
+  <div id="main_content">{% block content %}{% endblock %}</div>
   {% if not request.user.is_authenticated %}
   <div class="alert alert-secondary alert-dismissible" id="auth_alert">
     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>

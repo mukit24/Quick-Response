@@ -12,7 +12,6 @@ def prob_home(request):
     # print(request.resolver_match.url_name)
     post_form = PostForm()
     tags = Tag.objects.all().order_by('name')
-    
     temp = Problem.objects.first()
     # tags = []
     # for x in temp.tag.all():
@@ -58,10 +57,11 @@ def prob_home(request):
     return render(request,"problems/index.html",context)
 
 
-@login_required
 def create_problem(request):
+    if not request.user.is_authenticated:
+        print('yooooooooo')
+        return JsonResponse({'status':'fail'})
     if request.method == "POST":
-        # print(request.POST)
         post_form = PostForm(request.POST)
         if post_form.is_valid():
             new_post = post_form.save(commit=False)
@@ -69,6 +69,7 @@ def create_problem(request):
             new_post.save()
             post_form.save_m2m()
             tags = []
+            print(new_post.created_on)
             for x in new_post.tag.all():
                 tags.append(x.name)
             data = {
@@ -80,6 +81,7 @@ def create_problem(request):
                 'date':new_post.created_on,
             }
             return JsonResponse({'problem_data':data,'status':'success'}) 
+            # return redirect('prob_home')
         else:
             print(post_form.errors)
             return JsonResponse(dict(post_form.errors.items()))

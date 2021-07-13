@@ -2,6 +2,7 @@ from django import forms
 from .models import Problem,Tag,Solution,Comment
 
 class PostForm(forms.ModelForm):
+    # title = forms.CharField(required=False)
     class Meta:
         model = Problem
         fields = [

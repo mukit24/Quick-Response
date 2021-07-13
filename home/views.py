@@ -8,6 +8,7 @@ from django.contrib.auth import update_session_auth_hash
 from django.http import JsonResponse
 # Create your views here.
 def home_view(request):
+    print('yoo')
     context = {
 
     }
