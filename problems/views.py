@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from .forms import PostForm,SolutionForm,CommentForm
 from django.http import JsonResponse
-from .models import Problem,Tag,Comment
+from .models import Problem, Solution,Tag,Comment
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
 from django.core import serializers
@@ -63,6 +63,7 @@ def create_problem(request):
         return JsonResponse({'status':'fail'})
     if request.method == "POST":
         post_form = PostForm(request.POST)
+        print(request.POST)
         if post_form.is_valid():
             new_post = post_form.save(commit=False)
             new_post.author = request.user
@@ -89,6 +90,8 @@ def create_problem(request):
 
 def problem_details(request,id):
     problem = Problem.objects.get(id=id)
+    solutions = Solution.objects.filter(problem=problem)
+    sol_cnt = Solution.objects.filter(problem=problem).count()
     sol_form = SolutionForm()
     cmt_form = CommentForm()
     
@@ -96,11 +99,15 @@ def problem_details(request,id):
         'problem':problem,
         'sol_form':sol_form,
         'cmt_form':cmt_form,
+        'solutions':solutions,
+        'total_sol':sol_cnt,
     }
     return render(request,"problems/problem_details.html",context)
 
 
 def comment(request,id):
+    if not request.user.is_authenticated:
+        return JsonResponse({'status':'fail'})
     if request.method == 'POST':
         form = CommentForm(request.POST)
         if request.resolver_match.url_name == 'comment_problem':
@@ -119,8 +126,10 @@ def comment(request,id):
                 'date':new_cmt.created_on,
                 }
                 return JsonResponse({'comment_data':data,'status':'success'})
-        else:
-            pass
+            else:
+                # print(form.errors)
+                print('yoo')
+                return JsonResponse({})
 
 
 def delete_comment(request):
@@ -147,5 +156,36 @@ def edit_comment(request):
             }
             return JsonResponse({'edit_data':data,'status':'success'})
         else:
-            pass
+            return JsonResponse({})
+
+
+def create_solution(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({'status':'fail'})
+    if request.method == "POST":
+        sol_form = SolutionForm(request.POST)
+        prob_id = request.POST['id_problem']
+        problem = Problem.objects.get(id=prob_id)
+        print(request.POST)
+        if sol_form.is_valid():
+            new_sol = sol_form.save(commit=False)
+            new_sol.author = request.user
+            new_sol.problem = problem
+            new_sol.save()
+            sol_form.save_m2m()
+           
+            data = {
+                'id':new_sol.id,
+                'body':new_sol.body,
+                'author':new_sol.author.username,
+                'rating':new_sol.rating,
+                'date':new_sol.created_on,
+            }
+            return JsonResponse({'sol_data':data,'status':'success'})
+        else:
+            print(sol_form.errors)
+        # else:
+        #     pass
+            # print(post_form.errors)
+            # return JsonResponse(dict(post_form.errors.items()))
 

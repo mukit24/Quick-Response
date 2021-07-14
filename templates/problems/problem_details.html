@@ -58,13 +58,29 @@
                         <input type="submit" value="Submit" class="btn btn-success btn-sm mt-1 submit_cmt_p">
                         <input type="submit" value="Edit" class="btn btn-primary btn-sm mt-1 edit_cmt_p" >
                     </form>
+                    <div class="mt-2" id="cmt_noti"></div>
+                </div>
+                <div class="solution_list mt-3"> 
+                    <hr>
+                    {% if solutions %}
+                    <h5>{{total_sol}} Solution{{ total_sol|pluralize:",s" }}</h5>
+                    {% for sol in solutions %}
+                    <div class="sol_content pl-4">
+                        <p>{{sol.body|safe}}</p>
+                    </div>
+                    <button class="btn btn-secondary btn-sm py-0" id="cmt_btn">Add A Comment</button> 
+                    <hr>                   
+                    {% endfor %}
+                    {% endif %}
                 </div>
                 <div class="pt-3">
                 <p class="mb-1">Know someone who can give a solution? Share a link to this question via email, Twitter, or Facebook.</p>
                 <h5>Your Solution:</h5>
                 <form action="" method="POST" id="sol_form">
+                    {% csrf_token %}
                     {{sol_form.media}}
                     {{sol_form}}
+                    <input type="hidden" name="id_problem" value="{{problem.id}}">
                     <input type="submit" value="Submit" class="btn btn-success btn-sm pt-1">
                 </form>
                 </div>

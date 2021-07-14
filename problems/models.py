@@ -29,7 +29,7 @@ class Solution(models.Model):
     created_on = models.DateTimeField(default=datetime.now)
     last_modified = models.DateTimeField(default=datetime.now)
     rating = models.DecimalField(default=0,decimal_places=2,max_digits=10)
-    user_count = models.IntegerField(default=0)
+    # user_count = models.IntegerField(default=0)
     problem = models.ForeignKey('Problem', on_delete=models.CASCADE)
     
     def __str__(self):

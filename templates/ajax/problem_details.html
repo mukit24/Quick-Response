@@ -8,6 +8,8 @@
       'method': "POST",
       data: $(form).serialize(),
       success: function (data) {
+        $('#cmt_noti').empty();
+        if (data['status']=='success'){
         console.log(data);
         var output,prefix = data.comment_data;
         console.log(data.comment_data)
@@ -17,6 +19,18 @@
         $('#cmt_form_p').hide();
         $(output).hide().appendTo("#cmt_p_list").fadeIn(1000);
         $('#cmt_btn_cls').hide();
+        }else if(data['status']=='fail')
+        {
+          msg = '<p class="alert alert-danger font-weight-bold py-1">Sorry You Have To Login First</p>'
+          $('#cmt_noti').empty();
+          $(msg).hide().appendTo("#cmt_noti").fadeIn("slow");
+        }else{
+          $('#cmt_noti').empty();
+            var output = '<p class="alert alert-danger py-1 font-weight-bold">This Field Is Required</p>';
+            $(output).hide().appendTo("#cmt_noti").fadeIn("slow");
+            
+        }
+        
       }
     })
   })
@@ -24,6 +38,7 @@
   // delete cmmt
   $('#cmt_p_list').on('click','#cmt_dlt_btn',function(e){
     e.preventDefault();
+    $('#cmt_noti').empty();
     var id = $(this).attr('data-sid');
     my_data = {
       sid:id,    
@@ -43,13 +58,15 @@
   //edit comment
   $('.edit_cmt_p').click(function(e){
     e.preventDefault();
+    $('#cmt_noti').empty();
     var form = $(this).closest('form');
     $.ajax({
       'url': "{% url 'edit_comment_problem' %}",
       'method': "POST",
       data: $(form).serialize(),
       success: function (data) {
-        console.log(data);
+        if(data['status']=='success'){
+          console.log(data);
         var output = data.edit_data.c_body;
         var up_cmt = $('#cmt_p_list').find('a[data-sid='+data.edit_data.id+']').closest('#cmt_content').find('#cmt_body');
 
@@ -59,8 +76,33 @@
         
         $('#cmt_btn_cls').hide();
         $('#cmt_form_p').hide();
+        }else{
+          $('#cmt_noti').empty();
+            var output = '<p class="alert alert-danger py-1 font-weight-bold">This Field Can Not Be Blanked</p>';
+            $(output).hide().appendTo("#cmt_noti").fadeIn("slow");
+            
+        }
+        
         
       },
+    })
+  })
+
+
+  // solution submit
+  $('#sol_form').submit(function(e){
+    e.preventDefault();
+    console.log('clicked sol form');
+    // console.log(CKEDITOR.instances)
+    for (var instance in CKEDITOR.instances)
+      CKEDITOR.instances[instance].updateElement();
+    $.ajax({
+      url: "{% url 'create_solution' %}",
+      method: "POST",
+      data: $(this).serialize(),
+      success: function (data) {
+        console.log(data);
+      }
     })
   })
 </script>
