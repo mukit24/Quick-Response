@@ -128,6 +128,9 @@ $(document).ready(function () {
           }
         });
 
+        // var tags = $("#id_tag li label").find("input[type=checkbox]")
+        // console.log(tags)
+
         $('#id_tag').prevAll().eq(1).addClass('d-block').text('Tag (Selecet One or More):');
         $('#cmt_btn').click(function(){
           $('#cmt_form_p').show().trigger('reset');

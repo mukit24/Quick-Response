@@ -87,6 +87,17 @@ def create_problem(request):
             print(post_form.errors)
             return JsonResponse(dict(post_form.errors.items()))
 
+def delete_problem(request,id):
+    problem = Problem.objects.get(id=id)
+    problem.delete()
+    return redirect('prob_home')
+
+def edit_problem(request,id):
+    problem = Problem.objects.get(id=id)
+    form = PostForm(request.POST or None,instance=problem)
+    if form.is_valid():
+        form.save()
+
 def problem_details(request,id,msg=None):
     print(msg)
     problem = Problem.objects.get(id=id)
@@ -94,6 +105,7 @@ def problem_details(request,id,msg=None):
     sol_cnt = Solution.objects.filter(problem=problem).count()
     sol_form = SolutionForm()
     cmt_form = CommentForm()
+    update_post_form = PostForm(request.POST or None,instance=problem)
 
     success=''
     error=''
@@ -113,6 +125,7 @@ def problem_details(request,id,msg=None):
         'total_sol':sol_cnt,
         'success':success,
         'error': error,
+        'update_post_form':update_post_form,
 
     }
     return render(request,"problems/problem_details.html",context)
@@ -188,4 +201,7 @@ def create_solution(request,id):
             return redirect('problem_details',problem.id,'error')
     else:
         return redirect('problem_details',problem.id)
+
+def edit_solution(request,id):
+    pass
 
