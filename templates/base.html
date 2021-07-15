@@ -38,6 +38,19 @@
       margin: 0;
     }
   }
+  .sol_date_author{
+    font-size: 12px;
+    color: midnightblue;
+  }
+
+  #cmt_s{
+    font-size: 15px;
+    color: gray;
+    padding: 0;
+    padding-top: 10px;
+    cursor: pointer;
+    margin-bottom: 0;
+  }
     
 
     /* #home_icon{
@@ -112,7 +125,7 @@
     <a href="{% url 'account_signup' %}"><button class="btn btn-primary btn-sm py-0 text-light">
         Sign Up
       </button></a>
-    <a href="{% url 'account_login' %}"><button class="btn btn-success btn-sm py-0 text-light">
+    <a href="{% url 'account_login' %}?next={{request.path}}"><button class="btn btn-success btn-sm py-0 text-light">
         Login
       </button></a>
     {% endif %}
@@ -146,13 +159,13 @@
     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
     <strong class="pr-4">Wanna Join Us?</strong>
     <a href="{% url 'account_signup' %}"><button class="btn btn-success btn-sm">Sign Up</button></a>
-    <a href="{% url 'account_login' %}"><button class="btn btn-primary btn-sm">Login</button></a>
+    <a href="{% url 'account_login' %}?next={{request.path}}"><button class="btn btn-primary btn-sm">Login</button></a>
     <!-- <a href=""><button class="btn btn-info btn-sm "><i class="fa fa-facebook-official" style="font-size: 20px;"></i> Sign In Using Facebook</button></a> -->
-    <a href="{% provider_login_url 'google' %}"><button class="btn btn-dark btn-sm">
+    <a href="{% provider_login_url 'google' %}?next={{request.path}}"><button class="btn btn-dark btn-sm">
         <i class="fa fa-google" style="font-size: 20px"></i> Sign In Using
         Google
       </button></a>
-    <a href="{% provider_login_url 'github' %}"><button class="btn btn-secondary btn-sm">
+    <a href="{% provider_login_url 'github' %}?next={{request.path}}"><button class="btn btn-secondary btn-sm">
         <i class="fa fa-github" style="font-size: 20px"></i> Sign In Using
         Github
       </button></a>

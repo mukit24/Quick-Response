@@ -87,13 +87,23 @@ def create_problem(request):
             print(post_form.errors)
             return JsonResponse(dict(post_form.errors.items()))
 
-
-def problem_details(request,id):
+def problem_details(request,id,msg=None):
+    print(msg)
     problem = Problem.objects.get(id=id)
     solutions = Solution.objects.filter(problem=problem)
     sol_cnt = Solution.objects.filter(problem=problem).count()
     sol_form = SolutionForm()
     cmt_form = CommentForm()
+
+    success=''
+    error=''
+
+    if msg == 'success':
+        success = 'Solution Is Successfully Added'
+    elif msg == 'error':
+        error = 'Error! Solution Can\'t be Blank'
+    else:
+        pass
     
     context = {
         'problem':problem,
@@ -101,6 +111,9 @@ def problem_details(request,id):
         'cmt_form':cmt_form,
         'solutions':solutions,
         'total_sol':sol_cnt,
+        'success':success,
+        'error': error,
+
     }
     return render(request,"problems/problem_details.html",context)
 
@@ -158,14 +171,11 @@ def edit_comment(request):
         else:
             return JsonResponse({})
 
-
-def create_solution(request):
-    if not request.user.is_authenticated:
-        return JsonResponse({'status':'fail'})
+@login_required
+def create_solution(request,id):
+    problem = Problem.objects.get(id=id)
     if request.method == "POST":
         sol_form = SolutionForm(request.POST)
-        prob_id = request.POST['id_problem']
-        problem = Problem.objects.get(id=prob_id)
         print(request.POST)
         if sol_form.is_valid():
             new_sol = sol_form.save(commit=False)
@@ -173,19 +183,9 @@ def create_solution(request):
             new_sol.problem = problem
             new_sol.save()
             sol_form.save_m2m()
-           
-            data = {
-                'id':new_sol.id,
-                'body':new_sol.body,
-                'author':new_sol.author.username,
-                'rating':new_sol.rating,
-                'date':new_sol.created_on,
-            }
-            return JsonResponse({'sol_data':data,'status':'success'})
+            return redirect('problem_details',problem.id,'success')
         else:
-            print(sol_form.errors)
-        # else:
-        #     pass
-            # print(post_form.errors)
-            # return JsonResponse(dict(post_form.errors.items()))
+            return redirect('problem_details',problem.id,'error')
+    else:
+        return redirect('problem_details',problem.id)
 

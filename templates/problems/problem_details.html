@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static %} 
+{% load static %}
 {% block content %}
 <div style="background-color: whitesmoke;" id="post_section">
     <div class="container">
@@ -8,16 +8,19 @@
                 <h5 class="text-center">{{problem.title}}</h5>
                 <div class="row text-center">
                     <div class="col-lg-4">
-                        <h6 style="font-size: small;">Published By: <a href="" style="text-decoration: none;">{{problem.author}}</a></h6>
+                        <h6 style="font-size: small;">Published By: <a href=""
+                                style="text-decoration: none;">{{problem.author}}</a></h6>
                     </div>
                     <div class="col-lg-4">
                         <h6 style="font-size: small;">Published At {{problem.created_on}}</h6>
                     </div>
                     <div class="col-lg-4">
                         {% if problem.is_solved %}
-                        <h6 style="font-size: small;">Status: <span class="text-success font-weight-bold">Solved</span></h6>
+                        <h6 style="font-size: small;">Status: <span class="text-success font-weight-bold">Solved</span>
+                        </h6>
                         {% else %}
-                        <h6 style="font-size: small;">Status: <span class="text-danger font-weight-bold">Unsolved</span></h6>
+                        <h6 style="font-size: small;">Status: <span class="text-danger font-weight-bold">Unsolved</span>
+                        </h6>
                         {% endif %}
                     </div>
                 </div>
@@ -33,34 +36,45 @@
                     <hr class="m-0">
                     <div id="cmt_p_list">
                         {% if problem.cmts_p.all %}
-                    {% for cmt in problem.cmts_p.all %}
-                    <div id="cmt_content">
-                        <p class="py-1 pl-2 m-0 d-inline"><span id="cmt_body">{{cmt.c_body}}</span> | <a href="" style="text-decoration: none;font-weight: 500;">{{cmt.author}}</a> <span class="text-muted">{{cmt.created_on}}</span>
-                        </p>
-                        {% if request.user == cmt.author %}
+                        {% for cmt in problem.cmts_p.all %}
+                        <div id="cmt_content">
+                            <p class="py-1 pl-2 m-0 d-inline"><span id="cmt_body">{{cmt.c_body}}</span> | <a href=""
+                                    style="text-decoration: none;font-weight: 500;">{{cmt.author}}</a> <span
+                                    class="text-muted">{{cmt.created_on}}</span>
+                            </p>
+                            {% if request.user == cmt.author %}
                             <div class="d-inline" style="position: absolute;right: 0;">
-                                <a href="" data-toggle="tooltip" title="Delete" id="cmt_dlt_btn" data-sid ={{cmt.id}}><i class="fa fa-trash text-danger"></i></a>
-                                <a href="" data-toggle="tooltip" title="Edit" id="cmt_edit_open" data-sid ={{cmt.id}}><i class="fa fa-pencil-square-o text-primary"></i></a>
+                                <a href="" data-toggle="tooltip" title="Delete" id="cmt_dlt_btn" data-sid={{cmt.id}}><i
+                                        class="fa fa-trash text-danger"></i></a>
+                                <a href="" data-toggle="tooltip" title="Edit" id="cmt_edit_open" data-sid={{cmt.id}}><i
+                                        class="fa fa-pencil-square-o text-primary"></i></a>
                             </div>
+                            {% endif %}
+                            <hr class="m-0">
+                        </div>
+
+                        {% endfor %}
                         {% endif %}
-                        <hr class="m-0">
-                    </div>
-                    
-                    {% endfor %}
-                    {% endif %}
                     </div>
                     <button class="btn btn-info btn-sm py-0" id="cmt_btn">Add A Comment</button>
-                    <button class="btn btn-danger btn-sm py-0" id="cmt_btn_cls" style="display: none;">Close <i class="fa fa-close text-light"></i></button>
+                    <button class="btn btn-danger btn-sm py-0" id="cmt_btn_cls" style="display: none;">Close <i
+                            class="fa fa-close text-light"></i></button>
                     <form action="" method="POST" id="cmt_form_p" style="display: none;margin-top: 10px;">
                         {% csrf_token %}
                         <input type="hidden" id="cmt_id" name="cmt_id" value="">
                         {{cmt_form}}
                         <input type="submit" value="Submit" class="btn btn-success btn-sm mt-1 submit_cmt_p">
-                        <input type="submit" value="Edit" class="btn btn-primary btn-sm mt-1 edit_cmt_p" >
+                        <input type="submit" value="Edit" class="btn btn-primary btn-sm mt-1 edit_cmt_p">
                     </form>
                     <div class="mt-2" id="cmt_noti"></div>
                 </div>
-                <div class="solution_list mt-3"> 
+                {% if success %}
+                <p class="alert alert-success alert-dismissible font-weight-bold"><button type="button" class="close" data-dismiss="alert">&times;</button>{{success}}</p>
+                {% endif %}
+                {% if error %}
+                <p class="alert alert-danger alert-dismissible font-weight-bold"><button type="button" class="close" data-dismiss="alert">&times;</button>{{error}}</p>
+                {% endif %}
+                <div class="solution_list mt-3">
                     <hr>
                     {% if solutions %}
                     <h5>{{total_sol}} Solution{{ total_sol|pluralize:",s" }}</h5>
@@ -68,21 +82,35 @@
                     <div class="sol_content pl-4">
                         <p>{{sol.body|safe}}</p>
                     </div>
-                    <button class="btn btn-secondary btn-sm py-0" id="cmt_btn">Add A Comment</button> 
-                    <hr>                   
+                    <div class="row">
+                        <div class="col-6">
+                            <p id="cmt_s" data-toggle="collapse" data-target="#cmt_form_s{{sol.id}}">Add a comment</p>
+                            <div id="cmt_form_s{{sol.id}}" class="collapse">
+                                <form action="" class="py-1">
+                                    {% csrf_token %}
+                                    {{cmt_form}}
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col-6 text-right">
+                            <p class="sol_date_author">Answered {{sol.created_on}}<br>By {{sol.author}}</p>
+                        </div>
+                    </div>
+                    <hr class="m-0">
                     {% endfor %}
                     {% endif %}
                 </div>
                 <div class="pt-3">
-                <p class="mb-1">Know someone who can give a solution? Share a link to this question via email, Twitter, or Facebook.</p>
-                <h5>Your Solution:</h5>
-                <form action="" method="POST" id="sol_form">
-                    {% csrf_token %}
-                    {{sol_form.media}}
-                    {{sol_form}}
-                    <input type="hidden" name="id_problem" value="{{problem.id}}">
-                    <input type="submit" value="Submit" class="btn btn-success btn-sm pt-1">
-                </form>
+                    <p class="mb-1">Know someone who can give a solution? Share a link to this question via email,
+                        Twitter, or Facebook.</p>
+                    <h5>Your Solution:</h5>
+                    <form action="{% url 'create_solution' problem.id %}" method="POST" id="sol_form">
+                        {% csrf_token %}
+                        {{sol_form.media}}
+                        {{sol_form}}
+                        <!-- <input type="hidden" name="id_problem" value="{{problem.id}}"> -->
+                        <input type="submit" value="Submit" class="btn btn-success btn-sm pt-1">
+                    </form>
                 </div>
             </div>
         </div>
