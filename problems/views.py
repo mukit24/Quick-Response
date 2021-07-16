@@ -1,11 +1,10 @@
 from django.shortcuts import render,redirect
 from .forms import PostForm,SolutionForm,CommentForm
 from django.http import JsonResponse
-from .models import Problem, Solution,Tag,Comment
+from .models import Problem, Solution,Tag,Comment,Voter
 from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required
-from django.core import serializers
-from django.forms.models import model_to_dict
+from django.db.models import Q
 
 # Create your views here.
 def prob_home(request):
@@ -97,6 +96,7 @@ def edit_problem(request,id):
     form = PostForm(request.POST or None,instance=problem)
     if form.is_valid():
         form.save()
+        return redirect('problem_details',problem.id,'edit')
 
 def problem_details(request,id,msg=None):
     print(msg)
@@ -109,11 +109,14 @@ def problem_details(request,id,msg=None):
 
     success=''
     error=''
+    edit=''
 
     if msg == 'success':
         success = 'Solution Is Successfully Added'
     elif msg == 'error':
         error = 'Error! Solution Can\'t be Blank'
+    elif msg == 'edit':
+        edit = 'Problem Is Successfully Edited'
     else:
         pass
     
@@ -125,6 +128,7 @@ def problem_details(request,id,msg=None):
         'total_sol':sol_cnt,
         'success':success,
         'error': error,
+        'edit':edit,
         'update_post_form':update_post_form,
 
     }
@@ -202,6 +206,56 @@ def create_solution(request,id):
     else:
         return redirect('problem_details',problem.id)
 
-def edit_solution(request,id):
-    pass
+def upvote(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({'status':'not_login'})
+    id = request.GET['id']
+    solution = Solution.objects.get(id=id)
+    voter = Voter.objects.filter(Q(author=request.user) & Q(solution=solution))
+    if not voter:
+        solution.vote += 1
+        solution.save()
+        v = Voter(
+            author=request.user,
+            solution=solution,
+        )
+        v.save()
+        status = 'success'
+    else:
+        status = 'fail'
+    return JsonResponse({'status':status})
+
+
+def downvote(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({'status':'not_login'})
+    print('yooo')
+    id = request.GET['id']
+    solution = Solution.objects.get(id=id)
+    voter = Voter.objects.filter(Q(author=request.user) & Q(solution=solution))
+    if not voter:
+        solution.vote -= 1
+        solution.save()
+        v = Voter(
+            author=request.user,
+            solution=solution,
+        )
+        v.save()
+        status = 'success'
+    else:
+        status = 'fail'
+    return JsonResponse({'status':status})
+
+
+def best_answer(request):
+    id = request.GET['id']
+    solution = Solution.objects.get(id=id)
+    solution.best_answer = True
+    solution.save()
+    prob_id = solution.problem.id
+    problem = Problem.objects.get(id=prob_id)
+    print(problem)
+    problem.is_solved = True
+    problem.save()
+    return JsonResponse({'status':'success'})
 

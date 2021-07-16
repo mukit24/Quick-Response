@@ -25,11 +25,11 @@ class Problem(models.Model):
 
 class Solution(models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
-    body = RichTextUploadingField()
+    s_body = RichTextUploadingField()
     created_on = models.DateTimeField(default=datetime.now)
     last_modified = models.DateTimeField(default=datetime.now)
-    rating = models.DecimalField(default=0,decimal_places=2,max_digits=10)
-    # user_count = models.IntegerField(default=0)
+    vote = models.IntegerField(default=0)
+    best_answer = models.BooleanField(default=False)
     problem = models.ForeignKey('Problem', on_delete=models.CASCADE)
     
     def __str__(self):
@@ -41,7 +41,12 @@ class Comment(models.Model):
     created_on = models.DateTimeField(default=datetime.now)
     last_modified = models.DateTimeField(default=datetime.now)
     problem = models.ForeignKey('Problem', on_delete=models.CASCADE,blank=True,null=True,related_name='cmts_p')
-    solution = models.ForeignKey('Solution', on_delete=models.CASCADE,blank=True,null=True)
+    # solution = models.ForeignKey('Solution', on_delete=models.CASCADE,blank=True,null=True)
     
     def __str__(self):
         return self.c_body
+
+
+class Voter(models.Model):
+    author = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
+    solution = models.ForeignKey('Solution', on_delete=models.CASCADE)

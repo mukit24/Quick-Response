@@ -5,6 +5,8 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-9 p-2">
+                <div class="vote_noti">
+                </div>
                 <h5 class="text-center">{{problem.title}}</h5>
                 <div class="row text-center">
                     <div class="col-lg-4">
@@ -14,7 +16,7 @@
                     <div class="col-lg-4">
                         <h6 style="font-size: small;">Published At {{problem.created_on}}</h6>
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-4 problem_status">
                         {% if problem.is_solved %}
                         <h6 style="font-size: small;">Status: <span class="text-success font-weight-bold">Solved</span>
                         </h6>
@@ -26,11 +28,14 @@
                 </div>
                 <p>{{problem.body|safe}}</p>
                 {% if request.user == problem.author %}
-                <button class="btn btn-primary btn-sm py-0" data-toggle="modal" data-target="#myModal"><i class="fa fa-pencil-square-o"></i>
-                        Edit</button>
+                <button class="btn btn-primary btn-sm py-0" data-toggle="modal" data-target="#myModal"><i
+                        class="fa fa-pencil-square-o"></i>
+                    Edit</button>
                 <a href="{% url 'delete_problem' problem.id %}"><button class="btn btn-danger btn-sm py-0"><i
                             class="fa fa-trash"></i> Delete</button></a>
                 {% endif %}
+
+
                 <div class="modal fade" id="myModal">
                     <div class="modal-dialog">
                         <div class="modal-content bg-dark text-light">
@@ -38,15 +43,15 @@
                                 <h5 class="modal-title font-weight-bold text-info">Edit Problem</h5>
                                 <button type="button" class="close text-light" data-dismiss="modal">&times;</button>
                             </div>
-                
+
                             <div class="modal-body">
-                                <form action="" method="POST">
+                                <form action="{% url 'edit_problem' problem.id %}" method="POST">
                                     {% csrf_token %}
                                     {{update_post_form}}
                                     <button type="submit" class="btn btn-info">Edit</button>
                                 </form>
                             </div>
-                
+
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                             </div>
@@ -54,6 +59,10 @@
                     </div>
                 </div>
                 <hr>
+                {% if edit %}
+                <p class="alert alert-info alert-dismissible font-weight-bold"><button type="button" class="close"
+                        data-dismiss="alert">&times;</button>{{edit}}</p>
+                {% endif %}
                 {% for tag in problem.tag.all %}
                 <h6 class="d-inline-block">
                     <span class="badge badge-secondary p-1">{{tag.name}}</span>
@@ -110,36 +119,29 @@
                     <h5>{{total_sol}} Solution{{ total_sol|pluralize:",s" }}</h5>
                     {% for sol in solutions %}
                     <div class="sol_content pl-4">
-                        <p>{{sol.body|safe}}</p>
+                        <p>{{sol.s_body|safe}}</p>
                     </div>
-                    <div class="text-center">
-                        {% if request.user == sol.author %}
-                        <a href=""><button class="btn btn-primary btn-sm py-0"><i class="fa fa-pencil-square-o"></i>
-                                Edit</button></a>
-                        <a href=""><button class="btn btn-danger btn-sm py-0"><i
-                                    class="fa fa-trash"></i> Delete</button></a>
-                    {% endif %}
-                    </div>
+
                     <div class="row pb-1">
                         <div class="col-6 text-left pr-0">
                             <div class="btn-group btn-group-sm">
-                                <button type="button" class="btn btn-success" data-toggle="tooltip" title="Up Vote"><i
-                                        class="fa fa-arrow-up"></i> <span class="badge badge-light">3</span></button>
-                                <button type="button" class="btn btn-danger" data-toggle="tooltip" title="Down Vote"><i
-                                        class="fa fa-arrow-down"></i> <span class="badge badge-light">1</span></button>
+                                <button type="button" class="btn btn-success" data-toggle="tooltip" title="Up Vote" data-sid="{{sol.id}}" id="upvote_btn"><i
+                                        class="fa fa-arrow-up"></i></button>
                                 <button type="button" class="btn btn-light" data-toggle="tooltip"
+                                    title="Net Vote" id="vote_number">{{sol.vote}}</button>
+                                <button type="button" class="btn btn-danger" data-toggle="tooltip" title="Down Vote" data-sid="{{sol.id}}" id="downvote_btn"><i
+                                        class="fa fa-arrow-down"></i></button>
+                                        {% if request.user == problem.author and not problem.is_solved %}
+                                        <button type="button" class="btn btn-light" data-toggle="tooltip"
+                                    title="Select This As Best Answer?" id="select_best_answer" data-sid="{{sol.id}}"><i
+                                        class="fa fa-star-o" style="font-size: 18px;"></i></button>
+                                        {% endif %}
+                                        {% if sol.best_answer %}
+                                        <button type="button" class="btn btn-light" data-toggle="tooltip"
                                     title="Question Owner Accepted This As Best Answer"><i
                                         class="fa fa-star text-success" style="font-size: 18px;"></i></button>
+                                        {% endif %}
                             </div>
-
-                            <!-- <div class="row justify-content-left">
-                                <div class="col-6 m-0">
-                                    <p class="text-center"><i class="fa fa-arrow-up"></i><br>Upvote<br>3</p>
-                                </div>
-                                <div class="col-6 m-0">
-                                    <p class="text-center"><i class="fa fa-arrow-down"></i><br>Upvote<br>3</p>
-                                </div>
-                            </div> -->
                         </div>
                         <div class="col-6 text-right">
                             <div class="sol_date_author">

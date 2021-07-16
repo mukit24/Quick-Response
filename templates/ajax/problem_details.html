@@ -94,4 +94,97 @@
   //   console.log('clicked');
   // })
 
+  //upvote
+  $('body').on('click','#upvote_btn',function(e){
+    e.preventDefault();
+    console.log('yo');
+    sol_id = $(this).attr('data-sid');
+    let mythis = this;
+    my_data = {
+      id:sol_id
+    }
+    $.ajax({
+      'url': '{% url "upvote" %}',
+      'method':"GET",
+      'data':my_data,
+      success: function(data){
+        $('.vote_noti').empty();
+        if(data['status']=='success'){
+          var val = parseInt($(mythis).next().text());
+          $(mythis).next().text(val+1);
+          var msg = '<p class="alert alert-success alert-dismissible font-weight-bold text-center d-block"><button type="button" class="close"data-dismiss="alert">&times;</button>Your Up Vote Is Successfully Submitted</p>';
+          $('.vote_noti').html(msg).animate({'top':'30%'},'slow');
+        }else if(data['status']=='fail'){
+        var msg = '<p class="alert alert-danger alert-dismissible font-weight-bold text-center d-block"><button type="button" class="close"data-dismiss="alert">&times;</button>Sorry! You Have Already Submitted A Vote</p>';
+            $('.vote_noti').html(msg).animate({'top':'30%'},'slow');
+      }else{
+        var msg = '<p class="alert alert-danger alert-dismissible font-weight-bold text-center d-block"><button type="button" class="close"data-dismiss="alert">&times;</button>Sorry! Please Login First</p>';
+            $('.vote_noti').html(msg).animate({'top':'30%'},'slow');
+      }
+      }
+    })
+  })
+
+  //down vote
+  $('body').on('click','#downvote_btn',function(e){
+    e.preventDefault();
+    console.log('yo');
+    sol_id = $(this).attr('data-sid');
+    console.log(this)
+    let mythis = this;
+    my_data = {
+      id:sol_id
+    }
+    $.ajax({
+      'url': '{% url "downvote" %}',
+      'method':"GET",
+      'data':my_data,
+      success: function(data){
+        if(data['status']=='success'){
+          $('.vote_noti').empty();
+          var val = parseInt($(mythis).prev().text());
+          $(mythis).prev().text(val-1);
+          var msg = '<p class="alert alert-success alert-dismissible font-weight-bold text-center d-block"><button type="button" class="close"data-dismiss="alert">&times;</button>Your Down Vote Is Successfully Submitted</p>';
+          $('.vote_noti').html(msg).animate({'top':'30%'},'slow');
+        }else if(data['status']=='fail'){
+        var msg = '<p class="alert alert-danger alert-dismissible font-weight-bold text-center d-block"><button type="button" class="close"data-dismiss="alert">&times;</button>Sorry! You Have Already Submitted A Vote</p>';
+            $('.vote_noti').html(msg).animate({'top':'30%'},'slow');
+      }else{
+        var msg = '<p class="alert alert-danger alert-dismissible font-weight-bold text-center d-block"><button type="button" class="close"data-dismiss="alert">&times;</button>Sorry! Please Login First</p>';
+            $('.vote_noti').html(msg).animate({'top':'30%'},'slow');
+      }
+      }
+    })
+  })
+
+  //best answer
+  $('body').on('click','#select_best_answer',function(e){
+    console.log('clicked');
+    $(this).find('i').removeClass().addClass('fa fa-star text-success');
+    $(this).removeAttr('id');
+    $('button').filter('#select_best_answer').hide();
+    sol_id = $(this).attr('data-sid');
+    // console.log(this)
+    let mythis = this;
+    my_data = {
+      id:sol_id
+    }
+
+    $.ajax({
+      'url': '{% url "best_answer" %}',
+      'method':"GET",
+      'data':my_data,
+      success: function(data){
+        console.log(data);
+        $('.vote_noti').empty();
+        var msg = '<p class="alert alert-info alert-dismissible font-weight-bold text-center d-block"><button type="button" class="close"data-dismiss="alert">&times;</button>You Have Accepted This Solution As Best Answer</p>';
+        $('.vote_noti').html(msg).animate({'top':'30%'},'slow');
+        $('.problem_status').empty();
+        var output =  '<h6 style="font-size: small;">Status: <span class="text-success font-weight-bold">Solved</span>';
+        $('.problem_status').html(output);
+
+      }
+    })
+  })
+
 </script>

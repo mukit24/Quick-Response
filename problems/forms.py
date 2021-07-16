@@ -38,11 +38,11 @@ class SolutionForm(forms.ModelForm):
     class Meta:
         model = Solution
         fields = [
-            "body"
+            "s_body"
         ]
         
         labels = {
-            "body": "",
+            "s_body": "",
         }
 
 class CommentForm(forms.ModelForm):
@@ -59,3 +59,5 @@ class CommentForm(forms.ModelForm):
         labels = {
             "c_body": "",
         }
+
+
