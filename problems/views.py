@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.shortcuts import render,redirect
 from .forms import PostForm,SolutionForm,CommentForm
 from django.http import JsonResponse
@@ -7,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 
 # Create your views here.
-def prob_home(request):
+def prob_home(request,id=None):
     # print(request.resolver_match.url_name)
     post_form = PostForm()
     tags = Tag.objects.all().order_by('name')
@@ -31,8 +32,11 @@ def prob_home(request):
     # }
     # print(a_seri)
     # print(seri['title'])
-
-    if request.resolver_match.url_name == 'sort_oldest':
+    user = ''
+    if request.resolver_match.url_name == 'profile_view_problems':
+        user = User.objects.get(id=id)
+        problems = Problem.objects.filter(author=user).order_by('-created_on')
+    elif request.resolver_match.url_name == 'sort_oldest':
         problems = Problem.objects.all().order_by('created_on')
     elif request.resolver_match.url_name == 'sort_unsolved':
         problems = Problem.objects.filter(is_solved=False).order_by('-created_on')
@@ -52,6 +56,7 @@ def prob_home(request):
         'post_form':post_form,
         'problems':p_problems,
         'tags':tags,
+        'author':user,
     }
     return render(request,"problems/index.html",context)
 

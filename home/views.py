@@ -1,11 +1,14 @@
 from django.shortcuts import render,redirect
 from .forms import ProfileForm,UpdateProfileForm,UserForm
 from .models import Profile
+from problems.models import Problem
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
 from django.http import JsonResponse
+from django.db.models import Q
+
 # Create your views here.
 def home_view(request):
     print('yoo')
@@ -23,12 +26,15 @@ def profile_view(request,id):
         profile = Profile.objects.get(user=user)
         update_form = ProfileForm(instance=profile)
         pass_form = PasswordChangeForm(user=user)
+        solved = Problem.objects.filter(Q(author=profile.user) & Q(is_solved=True)).count()
+        unsolved = Problem.objects.filter(Q(author=profile.user) & Q(is_solved=False)).count()
     except:
         profile = ''
         update_form = ''
         pass_form = ''
+        solved = ''
+        unsolved = ''
     # print(Profile.objects.get(user=user))
-
     if request.method == 'POST':
         form = ProfileForm(request.POST,request.FILES)
         if form.is_valid():
@@ -42,6 +48,8 @@ def profile_view(request,id):
         'profile': profile,
         'update_form':update_form,
         'pass_form':pass_form,
+        'solved_count':solved,
+        'unsolved_count':unsolved,
     }
     return render(request,"home/profile.html",context)
 

@@ -19,4 +19,5 @@ urlpatterns = [
     path('upvote/',upvote,name='upvote'),
     path('downvote/',downvote,name='downvote'),
     path('best_answer/',best_answer,name='best_answer'),
+    path('<int:id>/profile/problems',prob_home,name='profile_view_problems'),
 ]

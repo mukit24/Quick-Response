@@ -1,6 +1,7 @@
 {% extends "base.html" %} {% load static %} {% block content %}
 <div style="background-color: whitesmoke;" id="post_section">
     <div class="container">
+        {% if not request.resolver_match.url_name == 'profile_view_problems' %}
         <div id="create_post">
             <div class="text-right">
                 <button class="btn btn-primary py-1 m-1" id="publish_problem_btn">
@@ -24,13 +25,26 @@
                 </div>
             </div>
         </div>
+        {% endif %}
         <div id="post_list">
+            {% with request.resolver_match.url_name as url_name %}
+            {% if url_name == 'profile_view_problems' %}
+            <h4 class="text-center alert alert-primary font-weight-bold py-1 my-2">
+                Problems Of {{author}}
+            </h4>
+            {% else %}
             <h4 class="text-center alert alert-primary font-weight-bold py-1 mb-2">
                 Top Problems
             </h4>
+            {% endif %}
+            {% endwith %}
             <div class="text-right" style="overflow-x: auto">
                 <div class="btn-group btn-group-sm">
                     {% with request.resolver_match.url_name as url_name %}
+                    {% if not url_name == 'profile_view_problems' %}
+                    <!-- <p class="text-center alert alert-success font-weight-bold py-1">
+                        Problems Of {{author}}
+                    </p> -->
                     <a href="{% url 'prob_home' %}"
                         class="{% if url_name == 'prob_home' %}btn btn-info btn-sm{% else %}btn btn-outline-info btn-sm{% endif %}">
                         Latest
@@ -58,6 +72,7 @@
                         data-toggle="modal" data-target="#tag_modal">
                         Tag
                     </button>
+                    {% endif %}
                     {% endwith %}
                 </div>
             </div>
@@ -183,7 +198,7 @@
                             <div class="col-5 text-right">
                                 <h6 style="font-size: small">
                                     Published At {{problem.created_on}} By <a style="text-decoration: none;"
-                                        href=''>{{problem.author}}</a>
+                                        href="{% url 'profile_view' problem.author.id %}">{{problem.author}}</a>
                                 </h6>
                             </div>
                         </div>

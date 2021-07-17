@@ -12,7 +12,42 @@
                 <div class="col-lg-4 p-3">
                     <img src="{{profile.profile_picture.url}}" style="object-fit: cover;" height="100px"
                         width="100px" />
-                    <h6 class="alert alert-success m-2 py-1 font-weight-bold">User: {{profile.user.username}}</h6>
+                    <h6 class="text-light pt-1">User: {{profile.user.username}}</h6>
+                    <h5><span class="badge badge-success">Achievements As Solver</span></h5>
+                    <div class="btn-group btn-group-sm">
+                        <button type="button" class="btn btn-light" style="border-right: 2px grey solid;"><i
+                            class="fa fa-arrow-up text-success"></i> <span class="badge badge-dark">5</span></button>
+                        <button type="button" class="btn btn-light" style="border-right: 2px grey solid;"><i
+                            class="fa fa-arrow-down text-danger"></i> <span class="badge badge-dark">5</span></button>
+                        <button type="button" class="btn btn-light"><i
+                            class="fa fa-star text-success"></i> <span class="badge badge-dark">5</span></button>
+                      </div>
+                    <!-- <div class="row justify-content-center">
+                        <div class="col-lg-4">
+                            <div class="table-responsive pt-2">
+                                <table class="table table-sm table-bordered">
+                                    <tbody class=" bg-light">
+                                        <tr>
+                                            <td class="text-success" data-toggle="tooltip" title="Up Vote"><i
+                                                class="fa fa-arrow-up"></i></td>
+                                            <td>5</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-danger" data-toggle="tooltip" title="Up Vote"><i
+                                                class="fa fa-arrow-down"></i></td>
+                                            <td>5</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-success" data-toggle="tooltip" title="Up Vote"><i
+                                                class="fa fa-star"></i></td>
+                                            <td>5</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div> -->
+                    
                     <h6 class="alert alert-danger m-2 py-1 font-weight-bold">Points: <span
                             class="badge badge-danger">{{profile.total_points}}</span></h6>
                     <h5><span class="badge badge-warning">#1 Rank</span></h5>
@@ -30,15 +65,17 @@
                     </h6>
                     <h6>Email: <span style="color: silver;">{{profile.user.email}}</span>
                     </h6>
+                    {% if request.user == profile.user %}
                     <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#myModal">Edit Profile</button>
                     <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal1">Change Password</button>
+                    {% endif %}
                 </div>
                 <div class="col-lg-4 p-3 text-center">
                     <h5><span class="badge badge-secondary p-2 mb-1">Problem Status</span></h5>
-                    <h6 class="alert alert-primary py-1 mr-2 font-weight-bold">Total Problems:  <span class="badge badge-primary">5</span></h6>
-                    <h6 class="alert alert-success py-1 mr-2 font-weight-bold">Solved Problems:  <span class="badge badge-success">5</span></h6>
-                    <h6 class="alert alert-danger py-1 mr-2 font-weight-bold">Unsolved Problems:  <span class="badge badge-danger">5</span></h6>
-                    <a href=""><button class="btn btn-danger btn-sm">View Problems</button></a>
+                    <h6 class="alert alert-primary py-1 mr-2 font-weight-bold">Total Problems:  <span class="badge badge-primary">{{profile.user.problem_set.count}}</span></h6>
+                    <h6 class="alert alert-success py-1 mr-2 font-weight-bold">Solved Problems:  <span class="badge badge-success">{{solved_count}}</span></h6>
+                    <h6 class="alert alert-danger py-1 mr-2 font-weight-bold">Unsolved Problems:  <span class="badge badge-danger">{{unsolved_count}}</span></h6>
+                    <a href="{% url 'profile_view_problems' profile.user.id %}"><button class="btn btn-danger btn-sm">View Problems</button></a>
                 </div>
             </div>
         </div>
