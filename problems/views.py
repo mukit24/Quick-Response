@@ -1,13 +1,40 @@
 from django.contrib.auth.models import User
 from django.shortcuts import render,redirect
 from .forms import PostForm,SolutionForm,CommentForm
-from django.http import JsonResponse
+from home.models import Profile
+from django.http import JsonResponse, request
 from .models import Problem, Solution,Tag,Comment,Voter
 from django.core.paginator import Paginator
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required,user_passes_test
 from django.db.models import Q
+from functools import wraps
+from django.http import HttpResponseRedirect
 
-# Create your views here.
+def profile_required(function):
+    @wraps(function)
+    def wrap(request, *args, **kwargs):
+        if request.user.is_anonymous:
+            return function(request, *args, **kwargs)
+        try:
+            profile = Profile.objects.get(user=request.user)
+            return function(request, *args, **kwargs)
+        except:
+            return redirect('profile_required',request.user.id,'required')
+    return wrap
+    # def profile_check(user):
+#     try:
+#         profile = Profile.objects.get(user=user)
+#         id = user.id
+#         return True
+#     except:
+#         return False\
+
+# def tem(request):
+#     user_id = request.user
+
+# @user_passes_test(profile_check,login_url=f'/{user_id}/profile/')
+
+
 def prob_home(request,id=None):
     # print(request.resolver_match.url_name)
     post_form = PostForm()
@@ -103,6 +130,7 @@ def edit_problem(request,id):
         form.save()
         return redirect('problem_details',problem.id,'edit')
 
+@profile_required
 def problem_details(request,id,msg=None):
     print(msg)
     problem = Problem.objects.get(id=id)
@@ -216,10 +244,14 @@ def upvote(request):
         return JsonResponse({'status':'not_login'})
     id = request.GET['id']
     solution = Solution.objects.get(id=id)
+    profile = Profile.objects.get(user=solution.author)
+    print(profile)
     voter = Voter.objects.filter(Q(author=request.user) & Q(solution=solution))
     if not voter:
         solution.vote += 1
         solution.save()
+        profile.total_points += 1
+        profile.save()
         v = Voter(
             author=request.user,
             solution=solution,
@@ -237,10 +269,13 @@ def downvote(request):
     print('yooo')
     id = request.GET['id']
     solution = Solution.objects.get(id=id)
+    profile = Profile.objects.get(user=request.user)
     voter = Voter.objects.filter(Q(author=request.user) & Q(solution=solution))
     if not voter:
         solution.vote -= 1
         solution.save()
+        profile.total_points -= 1
+        profile.save()
         v = Voter(
             author=request.user,
             solution=solution,
@@ -253,6 +288,7 @@ def downvote(request):
 
 
 def best_answer(request):
+    profile = Profile.objects.get(user=request.user)
     id = request.GET['id']
     solution = Solution.objects.get(id=id)
     solution.best_answer = True
@@ -262,5 +298,7 @@ def best_answer(request):
     print(problem)
     problem.is_solved = True
     problem.save()
+    profile.total_points += 10
+    profile.save()
     return JsonResponse({'status':'success'})
 

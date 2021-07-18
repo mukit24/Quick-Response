@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from .forms import ProfileForm,UpdateProfileForm,UserForm
 from .models import Profile
-from problems.models import Problem
+from problems.models import Problem, Solution
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib import messages
@@ -18,22 +18,34 @@ def home_view(request):
     return render(request,"home/home.html",context)
 
 
-def profile_view(request,id):
+def profile_view(request,id,msg=None):
     form = ProfileForm()
     user = User.objects.get(id=id)
     print(user)
+    alert = ''
+    if msg == 'required':
+        alert = 'You Must Create A Profile First'
     try:
         profile = Profile.objects.get(user=user)
         update_form = ProfileForm(instance=profile)
         pass_form = PasswordChangeForm(user=user)
         solved = Problem.objects.filter(Q(author=profile.user) & Q(is_solved=True)).count()
         unsolved = Problem.objects.filter(Q(author=profile.user) & Q(is_solved=False)).count()
+        voter = Solution.objects.filter(author=user)
+        best_answer = Solution.objects.filter(Q(author=user) & Q(best_answer=True)).count()
+        # print(best_answer)
+        total_vote = 0
+        for v in voter:
+            total_vote+=v.vote
+        print(total_vote)
     except:
         profile = ''
         update_form = ''
         pass_form = ''
         solved = ''
         unsolved = ''
+        total_vote = ''
+        best_answer = ''
     # print(Profile.objects.get(user=user))
     if request.method == 'POST':
         form = ProfileForm(request.POST,request.FILES)
@@ -50,6 +62,9 @@ def profile_view(request,id):
         'pass_form':pass_form,
         'solved_count':solved,
         'unsolved_count':unsolved,
+        'total_vote':total_vote,
+        'best_answer':best_answer,
+        'alert':alert,
     }
     return render(request,"home/profile.html",context)
 
@@ -74,4 +89,7 @@ def change_password(request):
             return JsonResponse({'status':'success'})
         else:
             return JsonResponse(dict(form.errors.items()))
+
+def points_table(request):
+    return render(request,'home/points.html',{})
             

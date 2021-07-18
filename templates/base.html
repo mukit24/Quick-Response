@@ -176,7 +176,7 @@
         class="{% if 'problems' in request.path %}text-light{% endif %}"
         >Problems</a
       >
-      <a href="#">Points</a>
+      <a href="{% url 'points' %}" class="{% if 'points' in request.path %}text-light{% endif %}">Points</a>
       {% endwith %} {% if request.user.is_authenticated %}
       <a
         href="{% url 'profile_view' request.user.id %}"
