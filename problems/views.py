@@ -269,7 +269,7 @@ def downvote(request):
     print('yooo')
     id = request.GET['id']
     solution = Solution.objects.get(id=id)
-    profile = Profile.objects.get(user=request.user)
+    profile = Profile.objects.get(user=solution.author)
     voter = Voter.objects.filter(Q(author=request.user) & Q(solution=solution))
     if not voter:
         solution.vote -= 1
@@ -288,9 +288,9 @@ def downvote(request):
 
 
 def best_answer(request):
-    profile = Profile.objects.get(user=request.user)
     id = request.GET['id']
     solution = Solution.objects.get(id=id)
+    profile = Profile.objects.get(user=solution.author)
     solution.best_answer = True
     solution.save()
     prob_id = solution.problem.id

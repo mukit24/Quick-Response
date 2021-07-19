@@ -1,7 +1,59 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
+{% load custom_tags %}
+<div style="background-color: whitesmoke;">
 <div class="container">
-    <h2>tooo</h2>
+    <h3 class="text-center"><span class="badge badge-info">Points Table</span></h3>
+    <div class="row justify-content-center">
+        <div class="col-lg-5">
+            <input class="form-control mb-2" id="myInput" type="text" placeholder="Search User..">
+            <div class="table-responsive">
+                <table class="table table-bordered table-info table-sm">
+                  <thead class="bg-info text-light">
+                    <tr class="text-center">
+                      <th>Rank</th>
+                      <th>User</th>
+                      <th>Votes & Stars</th>
+                      <th>Points</th>
+                    </tr>
+                  </thead>
+                  <tbody class="text-center" id="myTable">
+                      {% for profile in profiles %}
+                      <tr>
+                          <td class="font-weight-bold">{{profile.total_points|point_rank}}</td>
+                          <td id="user_td"><a href="{% url 'profile_view' profile.user.id %}" style="font-weight: 500;">{{profile.user.username}}</a></td>
+                          <td>
+                            <div class="btn-group btn-group-sm">
+                                {% if profile.user|vote_count > -1 %}
+                                <button type="button" class="btn btn-light" style="border-right: 2px grey solid;" data-toggle="tooltip" title="Net Vote"><i
+                                    class="fa fa-thumbs-up text-success" style="font-size: 20px;"></i> <span class="badge badge-dark">{{profile.user|vote_count}}</span></button>
+                                {% else %}
+                                <button type="button" class="btn btn-light" style="border-right: 2px grey solid;" data-toggle="tooltip" title="Net Vote"><i
+                                    class="fa fa-thumbs-down text-danger" style="font-size: 20px;"></i> <span class="badge badge-dark">{{profile.user|vote_count}}</span></button>
+                                {% endif %}
+                                <button type="button" class="btn btn-light" data-toggle="tooltip" title="Best Answer"><i
+                                    class="fa fa-star text-success" style="font-size: 19px;"></i> <span class="badge badge-dark">{{profile.user|star_count}}</span></button>
+                              </div>
+                          </td>
+                          <td class="font-weight-bold">{{profile.total_points}}</td>
+                      </tr>
+                      {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+        </div>
+    </div>
 </div>
+</div>
+<script>
+    $(document).ready(function(){
+      $("#myInput").on("keyup", function() {
+        var value = $(this).val().toLowerCase();
+        $("#myTable tr").filter(function() {
+          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+      });
+    });
+    </script>
 {% endblock %}

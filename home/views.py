@@ -31,21 +31,12 @@ def profile_view(request,id,msg=None):
         pass_form = PasswordChangeForm(user=user)
         solved = Problem.objects.filter(Q(author=profile.user) & Q(is_solved=True)).count()
         unsolved = Problem.objects.filter(Q(author=profile.user) & Q(is_solved=False)).count()
-        voter = Solution.objects.filter(author=user)
-        best_answer = Solution.objects.filter(Q(author=user) & Q(best_answer=True)).count()
-        # print(best_answer)
-        total_vote = 0
-        for v in voter:
-            total_vote+=v.vote
-        print(total_vote)
     except:
         profile = ''
         update_form = ''
         pass_form = ''
         solved = ''
         unsolved = ''
-        total_vote = ''
-        best_answer = ''
     # print(Profile.objects.get(user=user))
     if request.method == 'POST':
         form = ProfileForm(request.POST,request.FILES)
@@ -57,13 +48,12 @@ def profile_view(request,id,msg=None):
             return redirect('profile_view',user.id)
     context = {
         'form':form,
+        'user':user,
         'profile': profile,
         'update_form':update_form,
         'pass_form':pass_form,
         'solved_count':solved,
         'unsolved_count':unsolved,
-        'total_vote':total_vote,
-        'best_answer':best_answer,
         'alert':alert,
     }
     return render(request,"home/profile.html",context)
@@ -90,6 +80,11 @@ def change_password(request):
         else:
             return JsonResponse(dict(form.errors.items()))
 
+
 def points_table(request):
-    return render(request,'home/points.html',{})
+    profiles = Profile.objects.all().order_by('-total_points')
+    context = {
+        'profiles':profiles,
+    }
+    return render(request,'home/points.html',context)
             
