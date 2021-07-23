@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test</title>
+</head>
+<body>
+    <h2>Testing Purpose</h2>
+    <hr>
+    <table>
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Message</th>
+          </tr>
+        </thead>
+          {% for user in users  %}
+            {% if request.user != user %}
+              <tbody>
+                <tr>
+                  <th scope="row">{{ user.id }}</th>
+                  <td>{{ user.username }}</td>
+                  <td>
+                    <form action="{% url 'message' %}" id="form_message{{ user.id }}" method="post">
+                      {% csrf_token %}
+                    <input type="text" name="message" >
+                    <input type="hidden" name='user_id' value='{{ user.id }}'>
+                    <button type="submit" value="Submit">Send message</button>
+                  </form>
+                  </td>
+                </tr> 
+              </tbody>
+            {% endif %}
+          {% endfor %}
+      </table>
+</body>
+</html>

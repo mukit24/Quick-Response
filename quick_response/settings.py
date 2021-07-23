@@ -46,6 +46,8 @@ INSTALLED_APPS = [
     # 'allauth.socialaccount.providers.facebook',
     'ckeditor',
     'ckeditor_uploader',
+    # for noti pack
+    'notifications',
     
     'home',
     'problems',

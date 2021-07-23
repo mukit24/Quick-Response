@@ -8,7 +8,8 @@ from django.core.paginator import Paginator
 from django.contrib.auth.decorators import login_required,user_passes_test
 from django.db.models import Q
 from functools import wraps
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse
+from notifications.signals import notify
 
 def profile_required(function):
     @wraps(function)
@@ -181,6 +182,7 @@ def comment(request,id):
                 new_cmt.problem = problem
                 new_cmt.save()
                 form.save_m2m()
+                notify.send(sender=request.user, recipient=problem.author, verb='Commented on your problem',target=problem)
 
                 data = {
                 'id':new_cmt.id,
@@ -301,4 +303,22 @@ def best_answer(request):
     profile.total_points += 10
     profile.save()
     return JsonResponse({'status':'success'})
+
+
+def test(request):
+    users = User.objects.all()
+    return render(request,'test.html',{'users':users,})
+
+def message(request):
+    try:
+        if request.method == 'POST':
+            sender = User.objects.get(username=request.user)
+            receiver = User.objects.get(id=request.POST.get('user_id'))
+            notify.send(sender, recipient=receiver, verb='Message', description=request.POST.get('message'))
+            return HttpResponse('success yooooo')
+        else:
+            return HttpResponse("Invalid request")
+    except Exception as e:
+        print(e)
+        return HttpResponse("Please login from admin site for sending messages")
 

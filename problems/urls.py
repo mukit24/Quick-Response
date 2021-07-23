@@ -1,5 +1,5 @@
 from django.urls import path,include
-from .views import prob_home,create_problem,problem_details,comment,delete_comment,edit_comment,create_solution,delete_problem,edit_problem,upvote,downvote,best_answer
+from .views import prob_home,create_problem,problem_details,comment,delete_comment,edit_comment,create_solution,delete_problem,edit_problem,upvote,downvote,best_answer,test,message
 urlpatterns = [
     path('',prob_home,name='prob_home'),
     path('create/',create_problem,name='create_problem'),
@@ -20,4 +20,6 @@ urlpatterns = [
     path('downvote/',downvote,name='downvote'),
     path('best_answer/',best_answer,name='best_answer'),
     path('<int:id>/profile/problems',prob_home,name='profile_view_problems'),
+    path('test/',test,name='test'),
+    path('test/msg',message,name='message'),
 ]
