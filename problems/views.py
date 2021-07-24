@@ -10,6 +10,7 @@ from django.db.models import Q
 from functools import wraps
 from django.http import HttpResponse
 from notifications.signals import notify
+from datetime import datetime
 
 def profile_required(function):
     @wraps(function)
@@ -182,7 +183,7 @@ def comment(request,id):
                 new_cmt.problem = problem
                 new_cmt.save()
                 form.save_m2m()
-                notify.send(sender=request.user, recipient=problem.author, verb='Commented on your problem',target=problem)
+                notify.send(sender=request.user, recipient=problem.author, verb='Has commented on your problem',target=problem,timestamp=datetime.now())
 
                 data = {
                 'id':new_cmt.id,
@@ -235,6 +236,7 @@ def create_solution(request,id):
             new_sol.problem = problem
             new_sol.save()
             sol_form.save_m2m()
+            notify.send(sender=request.user, recipient=problem.author, verb='Has given a solution to your problem',target=problem,timestamp=datetime.now())
             return redirect('problem_details',problem.id,'success')
         else:
             return redirect('problem_details',problem.id,'error')
@@ -260,6 +262,7 @@ def upvote(request):
         )
         v.save()
         status = 'success'
+        notify.send(sender=request.user, recipient=solution.author, verb='Has upvoted your solution',target=solution.problem,timestamp=datetime.now())
     else:
         status = 'fail'
     return JsonResponse({'status':status})
@@ -284,6 +287,7 @@ def downvote(request):
         )
         v.save()
         status = 'success'
+        notify.send(sender=request.user, recipient=solution.author, verb='Has downvoted your solution',target=solution.problem,timestamp=datetime.now())
     else:
         status = 'fail'
     return JsonResponse({'status':status})
@@ -302,6 +306,7 @@ def best_answer(request):
     problem.save()
     profile.total_points += 10
     profile.save()
+    notify.send(sender=request.user, recipient=solution.author, verb='Has accepted your solution as Best Answer',target=problem,timestamp=datetime.now())
     return JsonResponse({'status':'success'})
 
 

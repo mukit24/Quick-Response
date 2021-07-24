@@ -20,6 +20,6 @@ urlpatterns = [
     path('downvote/',downvote,name='downvote'),
     path('best_answer/',best_answer,name='best_answer'),
     path('<int:id>/profile/problems',prob_home,name='profile_view_problems'),
-    path('test/',test,name='test'),
-    path('test/msg',message,name='message'),
+    # path('test/',test,name='test'),
+    # path('test/msg',message,name='message'),
 ]

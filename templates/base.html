@@ -64,6 +64,10 @@
       z-index: 1000;
     }
 
+    #slide_noti{
+      overflow-y: auto;
+    }
+
     /* #home_icon{
         animation-name: icon_rot;
         animation-duration: 2s;
@@ -106,7 +110,7 @@
     <ul class="navbar-nav ml-auto">
       <li class="nav-item">
         <a class="navbar-brand text-light" id="noti" href="#" data-toggle="tooltip" title="Notification"><i
-            class="fa fa-bell text-info"></i><sup class="badge badge-success" style="padding: 2px">0</sup></a>
+            class="fa fa-bell text-info"></i><sup class="{% if user.notifications.unread.count > 0 %}badge badge-danger{% else %}badge badge-success{% endif %}" style="padding: 2px">{{user.notifications.unread.count}}</sup></a>
       </li>
       <li class="nav-item">
         <div id="search_bar">
@@ -116,10 +120,10 @@
           </form>
         </div>
       </li>
-      <li class="nav-item">
+      <!-- <li class="nav-item">
         <a class="navbar-brand text-light" href="#" data-toggle="tooltip" title="Search" id="search_btn"><i
             class="fa fa-search"></i></a>
-      </li>
+      </li> -->
     </ul>
   </nav>
   <div id="my_side_nav" class="bg-dark">
@@ -151,21 +155,31 @@
   <div id="slide_noti" class="p-2 bg-dark text-light">
     <div class="text-center">
       <button class="btn btn-info m-2 font-weight-bold py-1">
-        Notifications <span class="badge badge-success">0</span>
+        Notifications <span class="{% if user.notifications.unread.count > 0 %}badge badge-danger{% else %}badge badge-success{% endif %}">{{user.notifications.unread.count}}</span>
       </button>
     </div>
 
 
     <!-- noti testing -->
     {% for notification in user.notifications.unread %}
-    <div>
-      Message from <b>{{ notification.actor }}</b>
-      <a href="/problems/{{notification.target.id}}/details/">{{ notification.verb }}</a>
-    </div>
+    <a href="{% url 'notification_op' notification.id %}" style="text-decoration: none;">
+      <div class="alert alert-danger mb-1">
+        <p class="mb-0"><b>{{ notification.actor }}</b> {{ notification.verb }} <small style="display: block;text-align: right;">{{notification.timestamp}}</small></p>
+      </div>
+    </a>
+    
+    {% endfor %}
+    {% for notification in user.notifications.read %}
+    <a href="/problems/{{notification.target.id}}/details/" style="text-decoration: none;">
+      <div class="alert alert-success mb-1">
+        <p class="mb-0"><b>{{ notification.actor }}</b> {{ notification.verb }} <small style="display: block;text-align: right;">{{notification.timestamp}}</small></p>
+      </div>
+    </a>
+    
     {% endfor %}
 
 
-    <p>
+    <!-- <p>
       Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ipsa quae
       autem itaque porro doloribus cumque et laboriosam, non reprehenderit!
       Reiciendis neque autem totam dolores, necessitatibus illo repellat
@@ -174,7 +188,7 @@
         culpa consectetur blanditiis deserunt optio harum qui amet similique
         quod! Doloribus obcaecati itaque fuga laboriosam! Fuga officia culpa
         rerum? Ipsam, iste.</span>
-    </p>
+    </p> -->
   </div>
   <div id="main_content">{% block content %}{% endblock %}</div>
   {% if not request.user.is_authenticated %}

@@ -10,7 +10,7 @@
                 <h5 class="text-center">{{problem.title}}</h5>
                 <div class="row text-center">
                     <div class="col-lg-4">
-                        <h6 style="font-size: small;">Published By: <a href=""
+                        <h6 style="font-size: small;">Published By: <a href="{% url 'profile_view' problem.author.id %}"
                                 style="text-decoration: none;">{{problem.author}}</a></h6>
                     </div>
                     <div class="col-lg-4">
@@ -75,7 +75,7 @@
                         {% if problem.cmts_p.all %}
                         {% for cmt in problem.cmts_p.all %}
                         <div id="cmt_content">
-                            <p class="py-1 pl-2 m-0 d-inline"><span id="cmt_body">{{cmt.c_body}}</span> | <a href=""
+                            <p class="py-1 pl-2 m-0 d-inline"><span id="cmt_body">{{cmt.c_body}}</span> | <a href="{% url 'profile_view' cmt.author.id %}"
                                     style="text-decoration: none;font-weight: 500;">{{cmt.author}}</a> <span
                                     class="text-muted">{{cmt.created_on}}</span>
                             </p>
@@ -145,7 +145,7 @@
                         </div>
                         <div class="col-6 text-right">
                             <div class="sol_date_author">
-                                Answered {{sol.created_on}}<br>By {{sol.author}}
+                                Answered {{sol.created_on}}<br>By <a href="{% url 'profile_view' sol.author.id %}">{{sol.author}}</a>
                             </div>
                         </div>
                     </div>
@@ -154,8 +154,8 @@
                     {% endif %}
                 </div>
                 <div class="pt-3">
-                    <p class="mb-1">Know someone who can give a solution? Share a link to this question via email,
-                        Twitter, or Facebook.</p>
+                    <!-- <p class="mb-1">Know someone who can give a solution? Share a link to this question via email,
+                        Twitter, or Facebook.</p> -->
                     <h5>Your Solution:</h5>
                     <form action="{% url 'create_solution' problem.id %}" method="POST" id="sol_form">
                         {% csrf_token %}

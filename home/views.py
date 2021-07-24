@@ -11,7 +11,10 @@ from django.db.models import Q
 
 # Create your views here.
 def home_view(request):
-    print('yoo')
+    # temp = request.user.notifications.first().mark_as_unread()
+    # print(request.user.notifications.first().id)
+    # request.user.notifications.get(id=1).mark_as_deleted()
+    # print(request.user.notifications.all())
     context = {
 
     }
@@ -87,4 +90,11 @@ def points_table(request):
         'profiles':profiles,
     }
     return render(request,'home/points.html',context)
+
+def notification_op(request,id):
+    noti = request.user.notifications.get(id=id)
+    # print(noti.target.id)
+    # print(noti.target_object_id)
+    noti.mark_as_read()
+    return redirect('problem_details',noti.target.id)
             
