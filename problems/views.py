@@ -145,6 +145,7 @@ def problem_details(request,id,msg=None):
     success=''
     error=''
     edit=''
+    same_author = ''
 
     if msg == 'success':
         success = 'Solution Is Successfully Added'
@@ -152,6 +153,8 @@ def problem_details(request,id,msg=None):
         error = 'Error! Solution Can\'t be Blank'
     elif msg == 'edit':
         edit = 'Problem Is Successfully Edited'
+    elif msg == 'same_author':
+        same_author = 'Sorry! You Can\'t Give Solution In Your Own Probelm' 
     else:
         pass
     
@@ -164,6 +167,7 @@ def problem_details(request,id,msg=None):
         'success':success,
         'error': error,
         'edit':edit,
+        'same_author':same_author,
         'update_post_form':update_post_form,
 
     }
@@ -227,6 +231,10 @@ def edit_comment(request):
 @login_required
 def create_solution(request,id):
     problem = Problem.objects.get(id=id)
+
+    if request.user == problem.author:
+        return redirect('problem_details',problem.id,'same_author')
+
     if request.method == "POST":
         sol_form = SolutionForm(request.POST)
         print(request.POST)
@@ -248,6 +256,9 @@ def upvote(request):
         return JsonResponse({'status':'not_login'})
     id = request.GET['id']
     solution = Solution.objects.get(id=id)
+
+    if request.user == solution.author:
+        return JsonResponse({'status':'self_sol'})
     profile = Profile.objects.get(user=solution.author)
     print(profile)
     voter = Voter.objects.filter(Q(author=request.user) & Q(solution=solution))
@@ -274,6 +285,8 @@ def downvote(request):
     print('yooo')
     id = request.GET['id']
     solution = Solution.objects.get(id=id)
+    if request.user == solution.author:
+        return JsonResponse({'status':'self_sol'})
     profile = Profile.objects.get(user=solution.author)
     voter = Voter.objects.filter(Q(author=request.user) & Q(solution=solution))
     if not voter:

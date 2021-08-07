@@ -117,7 +117,11 @@
         }else if(data['status']=='fail'){
         var msg = '<p class="alert alert-danger alert-dismissible font-weight-bold text-center d-block"><button type="button" class="close"data-dismiss="alert">&times;</button>Sorry! You Have Already Submitted A Vote</p>';
             $('.vote_noti').html(msg).animate({'top':'30%'},'slow');
-      }else{
+      }else if(data['status']=='self_sol'){
+        var msg = '<p class="alert alert-primary alert-dismissible font-weight-bold text-center d-block"><button type="button" class="close"data-dismiss="alert">&times;</button>Sorry! You Can\'t Vote On Your Own Solution</p>';
+            $('.vote_noti').html(msg).animate({'top':'30%'},'slow');
+      }
+      else{
         var msg = '<p class="alert alert-danger alert-dismissible font-weight-bold text-center d-block"><button type="button" class="close"data-dismiss="alert">&times;</button>Sorry! Please Login First</p>';
             $('.vote_noti').html(msg).animate({'top':'30%'},'slow');
       }
@@ -149,7 +153,11 @@
         }else if(data['status']=='fail'){
         var msg = '<p class="alert alert-danger alert-dismissible font-weight-bold text-center d-block"><button type="button" class="close"data-dismiss="alert">&times;</button>Sorry! You Have Already Submitted A Vote</p>';
             $('.vote_noti').html(msg).animate({'top':'30%'},'slow');
-      }else{
+      }else if(data['status']=='self_sol'){
+        var msg = '<p class="alert alert-info alert-dismissible font-weight-bold text-center d-block"><button type="button" class="close"data-dismiss="alert">&times;</button>Sorry! You Can\'t Vote On Your Own Solution</p>';
+            $('.vote_noti').html(msg).animate({'top':'30%'},'slow');
+      }
+      else{
         var msg = '<p class="alert alert-danger alert-dismissible font-weight-bold text-center d-block"><button type="button" class="close"data-dismiss="alert">&times;</button>Sorry! Please Login First</p>';
             $('.vote_noti').html(msg).animate({'top':'30%'},'slow');
       }

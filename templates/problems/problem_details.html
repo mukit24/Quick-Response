@@ -60,7 +60,7 @@
                 </div>
                 <hr>
                 {% if edit %}
-                <p class="alert alert-info alert-dismissible font-weight-bold"><button type="button" class="close"
+                <p class="alert alert-info alert-dismissible font-weight-bold text-center"><button type="button" class="close"
                         data-dismiss="alert">&times;</button>{{edit}}</p>
                 {% endif %}
                 {% for tag in problem.tag.all %}
@@ -106,12 +106,16 @@
                     <div class="mt-2" id="cmt_noti"></div>
                 </div>
                 {% if success %}
-                <p class="alert alert-success alert-dismissible font-weight-bold"><button type="button" class="close"
+                <p class="alert alert-success alert-dismissible font-weight-bold text-center"><button type="button" class="close"
                         data-dismiss="alert">&times;</button>{{success}}</p>
                 {% endif %}
                 {% if error %}
-                <p class="alert alert-danger alert-dismissible font-weight-bold"><button type="button" class="close"
+                <p class="alert alert-danger alert-dismissible font-weight-bold text-center"><button type="button" class="close"
                         data-dismiss="alert">&times;</button>{{error}}</p>
+                {% endif %}
+                {% if same_author %}
+                <p class="alert alert-info alert-dismissible font-weight-bold text-center"><button type="button" class="close"
+                        data-dismiss="alert">&times;</button>{{same_author}}</p>
                 {% endif %}
                 <div class="solution_list mt-3">
                     <hr>
