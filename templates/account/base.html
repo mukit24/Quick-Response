@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quick Response</title>
+  <link rel="icon" href="{% static 'images/logo.png' %}" type="image/icon type" />
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+
+  <!-- jQuery library -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+  <!-- Popper JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+  <!-- Latest compiled JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Girassol&family=Newsreader:ital,wght@0,400;0,500;0,600;1,700&display=swap');
+
+/* global css */
+:root{
+    /* --main-color: rgb(95, 95, 141);
+    --color-1: azure;
+    --color-2:cornsilk; */
+    --font-1: 'Newsreader', serif;
+    --font-2: 'Girassol', cursive;
+}
+body{
+    overflow-x: hidden !important;
+}
+
+*{
+    margin: 0 ;
+    padding: 0 ;
+    outline: none !important;
+}
+    .btn {
+      font-weight: 600;
+    }
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6{
+      font-family: "Courier New", Courier, monospace;
+    }
+
+    .nav-title{
+      font-size: 25px;
+      font-weight: 600;
+    }
+    .nav-title-1{
+      font-size: 24px;
+    }
+
+    .navbar-brand img{
+        width: 33px;
+      }
+    @media screen and (max-width: 425px) {
+      .nav-title-1{
+        font-size: 17px;
+      }
+      .nav-title{
+        font-size: 18px;
+      }
+      .navbar-brand img{
+        width: 25px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-sm bg-dark navbar-dark sticky-top">
+    <ul class="navbar-nav mr-auto">
+
+    </ul>
+    <ul class="navbar-nav m-auto">
+      <li class="nav-item">
+        <a class="navbar-brand" href="{% url 'home_view' %}"><img
+            src="{% static 'images/logo.png' %}" alt="Logo" /><span class="nav-title" style="
+                color: rgb(238, 228, 163);
+                font-family: 'Courier New', Courier, monospace;
+              " >Quick</span><span class="nav-title-1" style="color: lightgreen; font-family: var(--font-2);">
+            Response</span></a>
+      </li>
+    </ul>
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <a class="nav-link active btn btn-primary btn-sm py-0 mr-2" href="{% url 'account_signup' %}">Sign Up</a>
+      </li>
+      <br>
+      <li class="nav-item">
+        <a class="nav-link active btn btn-success btn-sm py-0" href="{% url 'account_login' %}">Login</a>
+      </li>
+    </ul>
+  </nav>
+  <div style="background-color: rgb(168, 166, 163); font-weight: 600" class="p-2">
+    {% block content %}{% endblock %}
+  </div>
+  <footer>
+    <div class="container text-center text-md-left mt-5" id="main_content">
+      <div class="row mt-3">
+        <div class="col-md-4 col-lg-4 col-xl-4 mx-auto mb-4" style="font-weight: 600">
+          <h6 class="text-uppercase font-weight-bold">Services</h6>
+          <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style="width: 60px" />
+          <p>Data Store Of Alumni</p>
+          <p>University Notice</p>
+          <p>Social Media Purpose</p>
+          <p>Image Gallery</p>
+        </div>
+        <div class="col-md-4 col-lg-4 col-xl-4 mx-auto mb-4">
+          <h6 class="text-uppercase font-weight-bold">Useful links</h6>
+          <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style="width: 60px" />
+          <p>
+            <a href="#!">Khulna University</a>
+          </p>
+          <p>
+            <a href="#!">Facebook</a>
+          </p>
+          <p>
+            <a href="#!">Linkdin</a>
+          </p>
+          <p>
+            <a href="#!">Instragram</a>
+          </p>
+        </div>
+        <div class="col-md-4 col-lg-4 col-xl-4 mx-auto mb-md-0 mb-4" style="font-weight: 600">
+          <h6 class="text-uppercase font-weight-bold">Contact</h6>
+          <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto" style="width: 60px" />
+          <p>
+            <a href="mailto:mukithasanpranto4@gmail.com">mukithasanpranto4@gmail.com</a>
+          </p>
+          <p>+880 1980492420</p>
+        </div>
+      </div>
+    </div>
+    <div class="footer-copyright text-center text-light p-3 bg-dark" style="font-weight: 600;">
+      © 2021 Copyright:
+      <a href="{% url 'home_view' %}" style="font-weight: 700"> Quick-Response.com</a>
+    </div>
+  </footer>
+  <script>
+    $(document).ready(function () {
+      $('input').addClass('form-control');
+      $('input[type=checkbox]').removeClass('form-control');
+    })
+  </script>
+</body>
+
+</html>

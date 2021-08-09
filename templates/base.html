@@ -26,8 +26,36 @@
 
   <link rel="stylesheet" href="{% static 'style.css' %}" />
   <script src="{% static 'main.js' %}"></script>
+  <link rel="stylesheet" href="{% static 'owl.carousel.min.css' %}" />
+  <script src="{% static 'owl.carousel.min.js' %}"></script>
 
   <style>
+    /* font */
+@import url('https://fonts.googleapis.com/css2?family=Girassol&family=Newsreader:ital,wght@0,400;0,500;0,600;1,700&display=swap');
+
+/* global css */
+:root{
+    /* --main-color: rgb(95, 95, 141);
+    --color-1: azure;
+    --color-2:cornsilk; */
+    --font-1: 'Newsreader', serif;
+    --font-2: 'Girassol', cursive;
+}
+body{
+    overflow-x: hidden !important;
+}
+
+*{
+    margin: 0 ;
+    padding: 0 ;
+    outline: none !important;
+}
+
+    img {
+      max-width: 100%;
+      vertical-align: middle;
+    }
+
     #prob_index_sol {
       border-bottom: 1px solid grey;
       margin: 0 25px;
@@ -68,6 +96,66 @@
       overflow-y: auto;
     }
 
+    .nav-title{
+      font-size: 25px;
+      font-weight: 600;
+    }
+    .nav-title-1{
+      font-size: 24px;
+    }
+
+    .navbar-brand img{
+        width: 33px;
+      }
+
+      .home_p{
+        font-size: 17px;
+        font-weight: 600;
+        color: rgb(136, 130, 130);
+        letter-spacing: 2px;
+        font-style: italic;
+      }
+
+    @media screen and (max-width: 425px) {
+      .nav-title-1{
+        font-size: 17px;
+      }
+      .nav-title{
+        font-size: 18px;
+      }
+      .navbar-brand img{
+        width: 25px;
+      }
+      #menu_icon{
+        font-size: 18px;
+      }
+      #noti{
+        font-size: 18px;
+      }
+    }
+
+    .card{
+      margin: 10px;
+      text-align: center;
+      border-radius: 10px;
+    }
+
+    .card-title{
+      color: green;
+    }
+    .card-body i{
+      color: darkgreen;
+    }
+    .card-body p{
+      font-size: 15px;
+        font-weight: 600;
+        color: rgb(136, 130, 130);
+    }
+    .my_fade_main {
+      opacity: 0;
+      bottom: -50px;
+    }
+
     /* #home_icon{
         animation-name: icon_rot;
         animation-duration: 2s;
@@ -97,12 +185,11 @@
 
     <ul class="navbar-nav m-auto">
       <li class="nav-item">
-        <a class="navbar-brand" href="{% url 'home_view' %}" style="font-weight: 600"><img
-            src="{% static 'images/logo.png' %}" alt="Logo" style="width: 33px" /><span style="
+        <a class="navbar-brand" href="{% url 'home_view' %}"><img
+            src="{% static 'images/logo.png' %}" alt="Logo" /><span class="nav-title" style="
                 color: rgb(238, 228, 163);
                 font-family: 'Courier New', Courier, monospace;
-                font-size: larger;
-              ">Quick</span><span style="color: lightgreen; font-family: cursive">
+              " >Quick</span><span class="nav-title-1" style="color: lightgreen; font-family: var(--font-2);">
             Response</span></a>
       </li>
     </ul>
@@ -112,14 +199,14 @@
         <a class="navbar-brand text-light" id="noti" href="#" data-toggle="tooltip" title="Notification"><i
             class="fa fa-bell text-info"></i><sup class="{% if user.notifications.unread.count > 0 %}badge badge-danger{% else %}badge badge-success{% endif %}" style="padding: 2px">{{user.notifications.unread.count}}</sup></a>
       </li>
-      <li class="nav-item">
+      <!-- <li class="nav-item">
         <div id="search_bar">
           <form class="form-inline" action="/action_page.php">
             <input class="form-control mr-1" type="text" placeholder="Search" />
             <button class="btn btn-success" type="submit">Search</button>
           </form>
         </div>
-      </li>
+      </li> -->
       <!-- <li class="nav-item">
         <a class="navbar-brand text-light" href="#" data-toggle="tooltip" title="Search" id="search_btn"><i
             class="fa fa-search"></i></a>
@@ -254,6 +341,18 @@
   <script>
     // var tags = $("#id_tag li label").find("input[type=checkbox]");
     // // console.log(tags)
+    $(window).scroll(function () {
+    $('.my_fade_main').each(function (i) {
+
+      var bottom_of_object = $(this).position().top + $(this).outerHeight();
+      var bottom_of_window = $(window).scrollTop() + $(window).height();
+      var topp = $(this).position().top;
+      if (bottom_of_window > bottom_of_object) {
+        $(this).animate({ 'opacity': '1', 'bottom': '0px', }, 1200);
+
+      }
+    });
+  });
     $(document).ready(function () {
       $("#id_tag input[type=checkbox]").each(function () {
         if (this.checked) {
@@ -262,6 +361,27 @@
           $('#myInput_tag').before('<h6 class="d-inline-block mx-1"><span class="badge badge-secondary">' + value + '</span></h6>');
         }
       });
+
+      $('.feature-carousel').owlCarousel({
+        loop:true,
+        autoplay:true,
+        margin:0,
+        responsiveClass:true,
+        responsive:{
+            0:{
+                items:1,
+            },
+            // 300:{
+            //   items:2,
+            // },
+            500:{
+                items:3,
+            },
+            1000:{
+                items:4,
+            }
+        }
+    })
     })
 
   </script>

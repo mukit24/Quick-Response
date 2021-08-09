@@ -3,42 +3,75 @@
 {% block content %}
 <div class="jumbotron jumbotron-fluid" style="background: url('/static/images/b.jpg') no-repeat bottom fixed; 
 background-size: cover;min-height: 60vh;margin: 0;">
-<h2 class="text-center text-light font-weight-bold">Welcome To Quick Response</h2>
+<h1 class="text-center text-light" style="font-family: var(--font-2);font-weight: 500;letter-spacing: 3px;">Welcome To Quick Response</h1>
 <h4 class="text-center text-light">A Modern Educational Platform For Solving Your Problems</h4>
 <div class="text-center">
     <button class="btn btn-outline-success font-weight-bold">Get Started</button>
 </div>
 </div>
-<div  style="background-color: rgb(182, 202, 171);">
+<div  class="bg-light">
   <div class="container pt-4 pb-4">
-    <h3 class="text-center font-weight-bold alert alert-success py-1">
-      Quick Response's Activity</h3>
-    <div class="row p-5">
-      <div class="col-6 col-lg-3 my_fade1" style="text-align: center;">
-        <i class="fa fa-question" id="home_icon" style="font-size:36px;color: darkgreen;"></i>
-        <h4 class="pt-2"><strong>Profile of An Alumni</strong>
-        </h4>
-        <p style="font-size: large;">Each alumni is given a profile with necessary information.</p>
+    <div class="row align-items-center">
+      <div class="col-lg-8 pb-2 my_fade1">
+        <h3 style="font-family: var(--font-1);" class="text-center font-weight-bold">Quick Response Platform</h3>
+        <p class="home_p">Are you stuck on a problem? Can't find the answer anywhere? Then here we are raedy to give a Quick Response in your problem. Our platform is an educational platform for solving your problems. So, don't worry and oviously don't hesitate to post your problems here. </p>
+        <div class="text-center">
+          <button class="btn btn-primary btn-sm">Get Started</button>
+        </div>
       </div>
-      <div class="col-6 col-lg-3 my_fade1" style="text-align: center;">
-        <i class="fa fa-pencil" id="home_icon" style="font-size:36px;color: darkgreen;"></i>
-        <h4 class="pt-2"><strong>Searching For ALumni</strong>
-        </h4>
-        <p style="font-size: large;">One can search for other alumni details with some keys.</p>
+      <div class="col-lg-4 my_fade2">
+        <div class="home-img text-center">
+          <img style="max-width: 200px; width: 100%;" src="{% static 'images/home_banner.png' %}" alt="computer">
       </div>
-      <div class="col-6 col-lg-3 my_fade2" style="text-align: center;">
-        <i class="fa fa-star" id="home_icon" style="font-size:36px;color: darkgreen;"></i>
-        <h4 class="pt-2"><strong>Events For Helping</strong>
-        </h4>
-        <p style="font-size: large;">Alumni can contribute on different events that are running on varsity</p>
       </div>
-      <div class="col-6 col-lg-3 my_fade2" style="text-align: center;">
-        <i class="fa fa-group" id="home_icon" style="font-size:36px;color: darkgreen;"></i>
-        <h4 class="pt-2"><strong>Events For Helping</strong>
-        </h4>
-        <p style="font-size: large;">Alumni can contribute on different events that are running on varsity</p>
-      </div>
-    </div>    
+    </div>
+    
+    
   </div>
+</div>
+<div class="features" style="background-color: rgb(235, 232, 232);">
+  <div class="container py-4">
+    <h2 class="text-center font-weight-bold pb-2" style="font-family: var(--font-1);">Features To Explore</h2>
+    <div class="row">
+      <div class="owl-carousel feature-carousel">
+
+          <div class="card bg-light my_fade_main">
+            <div class="card-body">
+              <h5 class="card-title font-weight-bold">Fast Solution <i class="fa fa-comment"></i></h5>
+              <p class="card-text">User can post a problem with problem type tag. Then he/she will get a solution if others are able to answer.</p>
+              
+            </div>
+          </div>
+        
+
+          <div class="card bg-light my_fade_main">
+            <div class="card-body">
+              <h5 class="card-title font-weight-bold">Notifications <i class="fa fa-bell"></i></h5>
+              <p class="card-text">User will be notified if someone interacts with the problem/solution that user has posted.</p>
+              
+            </div>
+          </div>
+        
+
+          <div class="card bg-light my_fade_main">
+            <div class="card-body">
+              <h5 class="card-title font-weight-bold">User Freindly <i class="fa fa-child"></i></h5>
+              <p class="card-text">This platform is fully user friendly and interactive. You can view as a social media that focuses on educational sector. </p>
+              
+            </div>
+          </div>
+        
+          <div class="card bg-light my_fade_main">
+            <div class="card-body">
+              <h5 class="card-title font-weight-bold">Points <i class="fa fa-star"></i></h5>
+              <p class="card-text">By getting votes, best answer on your solution will get you some points. There is a points table for showing the points.</p>
+            </div>
+          </div>
+        
+      </div>
+      
+    </div> 
+  </div>
+     
 </div>
 {% endblock %}
