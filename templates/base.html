@@ -151,11 +151,35 @@ body{
         font-weight: 600;
         color: rgb(136, 130, 130);
     }
+    .feature-carousel .card{
+      height: 180px;
+    }
+    
     .my_fade_main {
       opacity: 0;
       bottom: -50px;
     }
 
+    .owl-carousel {
+    position: relative;
+}
+.owl-next i, .owl-prev i{
+  font-size: 20px;
+}
+.owl-next, .owl-prev {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);
+}
+.owl-next {
+    right: 0;
+    display: flex;
+}
+.owl-prev{
+    left: 0;
+    display: flex;
+}
     /* #home_icon{
         animation-name: icon_rot;
         animation-duration: 2s;
@@ -168,6 +192,18 @@ body{
     0%   {transform: rotate(0deg) }
     100% {transform: rotate(360deg) }
     } */
+
+    #slide_noti {
+      overflow-x: hidden !important;
+      width: 0px;
+      height: 100%;
+      position: fixed;
+      right: 0;
+      padding: 0px !important;
+      overflow-y: auto;
+      z-index: 1;
+      transition: 0.5s;
+    }
   </style>
   <script>
 
@@ -199,18 +235,6 @@ body{
         <a class="navbar-brand text-light" id="noti" href="#" data-toggle="tooltip" title="Notification"><i
             class="fa fa-bell text-info"></i><sup class="{% if user.notifications.unread.count > 0 %}badge badge-danger{% else %}badge badge-success{% endif %}" style="padding: 2px">{{user.notifications.unread.count}}</sup></a>
       </li>
-      <!-- <li class="nav-item">
-        <div id="search_bar">
-          <form class="form-inline" action="/action_page.php">
-            <input class="form-control mr-1" type="text" placeholder="Search" />
-            <button class="btn btn-success" type="submit">Search</button>
-          </form>
-        </div>
-      </li> -->
-      <!-- <li class="nav-item">
-        <a class="navbar-brand text-light" href="#" data-toggle="tooltip" title="Search" id="search_btn"><i
-            class="fa fa-search"></i></a>
-      </li> -->
     </ul>
   </nav>
   <div id="my_side_nav" class="bg-dark">
@@ -233,13 +257,13 @@ body{
       </button></a>
     {% endif %}
   </div>
-  <div id="search_bar_sm" class="bg-dark p-2">
+  <!-- <div id="search_bar_sm" class="bg-dark p-2">
     <form class="form-inline" action="/action_page.php">
       <input class="form-control mr-1" type="text" placeholder="Search" />
       <button class="btn btn-success" type="submit">Search</button>
     </form>
-  </div>
-  <div id="slide_noti" class="p-2 bg-dark text-light">
+  </div> -->
+  <div id="slide_noti" class="bg-dark text-light">
     <div class="text-center">
       <button class="btn btn-info m-2 font-weight-bold py-1">
         Notifications <span class="{% if user.notifications.unread.count > 0 %}badge badge-danger{% else %}badge badge-success{% endif %}">{{user.notifications.unread.count}}</span>
@@ -250,7 +274,7 @@ body{
     <!-- noti testing -->
     {% for notification in user.notifications.unread %}
     <a href="{% url 'notification_op' notification.id %}" style="text-decoration: none;">
-      <div class="alert alert-danger mb-1">
+      <div class="alert alert-danger mb-1 m-2">
         <p class="mb-0"><b>{{ notification.actor }}</b> {{ notification.verb }} <small style="display: block;text-align: right;">{{notification.timestamp}}</small></p>
       </div>
     </a>
@@ -258,24 +282,12 @@ body{
     {% endfor %}
     {% for notification in user.notifications.read %}
     <a href="/problems/{{notification.target.id}}/details/" style="text-decoration: none;">
-      <div class="alert alert-success mb-1">
+      <div class="alert alert-success mb-1 m-2">
         <p class="mb-0"><b>{{ notification.actor }}</b> {{ notification.verb }} <small style="display: block;text-align: right;">{{notification.timestamp}}</small></p>
       </div>
     </a>
     
     {% endfor %}
-
-
-    <!-- <p>
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ipsa quae
-      autem itaque porro doloribus cumque et laboriosam, non reprehenderit!
-      Reiciendis neque autem totam dolores, necessitatibus illo repellat
-      expedita assumenda quasi?<button class="btn btn-success btn-sm">
-        Load More</button><span id="more_noti">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Possimus
-        culpa consectetur blanditiis deserunt optio harum qui amet similique
-        quod! Doloribus obcaecati itaque fuga laboriosam! Fuga officia culpa
-        rerum? Ipsam, iste.</span>
-    </p> -->
   </div>
   <div id="main_content">{% block content %}{% endblock %}</div>
   {% if not request.user.is_authenticated %}
@@ -354,6 +366,56 @@ body{
     });
   });
     $(document).ready(function () {
+      // menu btn
+      $("#menu_btn").click(function (e) {
+        console.log('yoo');
+    e.preventDefault();
+    if ($("#my_side_nav").hasClass("open_nav")) {
+      $("#my_side_nav").css({ width: "0" }).removeClass("open_nav");
+      $("#menu_icon")
+        .removeClass("fa fa-remove")
+        .addClass("fa fa-reorder");
+      $("#main_content").css({ filter: 'blur(0px)' });
+    } else {
+      console.log('yooside');
+      if ($("#slide_noti").hasClass("expand")) {
+      // $("#main_content").css({ filter: 'blur(0px)' });
+      $("#slide_noti").css({ width: "0px" }).removeClass("expand");
+    }
+      $("#my_side_nav").css({ width: "180px" }).addClass("open_nav");
+      $("#menu_icon")
+        .removeClass("fa fa-reorder")
+        .addClass("fa fa-remove");
+      $("#main_content").css({ filter: 'blur(2px)' });
+    }
+  });
+
+  // noti btn
+  $("#noti").click(function (e) {
+    e.preventDefault();
+    if ($("#slide_noti").hasClass("expand")) {
+      $("#main_content").css({ filter: 'blur(0px)' });
+      $("#slide_noti").css({ width: "0px" }).removeClass("expand");
+    } else {
+      if ($("#my_side_nav").hasClass("open_nav")) {
+        $("#my_side_nav").css({ width: "0" }).removeClass("open_nav");
+        $("#menu_icon")
+        .removeClass("fa fa-remove")
+        .addClass("fa fa-reorder");
+      }
+      if ($(window).width() < 300){
+        $("#slide_noti").css({ width: "220px" }).addClass("expand");
+      $("#main_content").css({ filter: 'blur(2px)' });
+      }else{
+        $("#slide_noti").css({ width: "280px" }).addClass("expand");
+      $("#main_content").css({ filter: 'blur(2px)' });
+      }
+      
+    }
+  });
+
+
+
       $("#id_tag input[type=checkbox]").each(function () {
         if (this.checked) {
           var value = $(this).parent().text();
@@ -365,17 +427,16 @@ body{
       $('.feature-carousel').owlCarousel({
         loop:true,
         autoplay:true,
-        margin:0,
+        margin: 0,
+        nav: true,
+        navText: ["<i class='fa fa-caret-left' aria-hidden='true'></i>","<i class='fa fa-caret-right' aria-hidden='true'></i>"],
         responsiveClass:true,
         responsive:{
             0:{
                 items:1,
             },
-            // 300:{
-            //   items:2,
-            // },
             500:{
-                items:3,
+                items:2,
             },
             1000:{
                 items:4,

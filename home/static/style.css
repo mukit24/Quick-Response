@@ -71,16 +71,6 @@ h1,
       right: -50px;
     }
 
-    #slide_noti {
-      width: 300px;
-      height: 100%;
-      position: fixed;
-      right: 0;
-      border-top: 1px grey solid;
-      display: none;
-      z-index: 1;
-    }
-
     /* my_side_nav */
     #my_side_nav {
       border-top: 1px grey solid;

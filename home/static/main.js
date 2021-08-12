@@ -1,13 +1,4 @@
-// side nav bar
-function openNav() {
-  document.getElementById("mySidenav").style.width = "220px";
-  document.getElementById("main_content").style.marginLeft = "220px";
-}
 
-function closeNav() {
-  document.getElementById("mySidenav").style.width = "0";
-  document.getElementById("main_content").style.marginLeft = "0";
-}
 
 //search bar
 $(document).ready(function () {
@@ -52,35 +43,10 @@ $(document).ready(function () {
 
 
 
-  $("#noti").click(function (e) {
-    e.preventDefault();
-    $("#slide_noti").slideToggle(500);
-    $("#slide_noti").toggleClass("expand");
-    if ($("#slide_noti").hasClass("expand")) {
-      $("#main_content").css({ marginRight: "300px" });
-    } else {
-      $("#main_content").css({ marginRight: "0" });
-    }
-  });
+  
 
 
-  $("#menu_btn").click(function (e) {
-    e.preventDefault();
-    if ($("#my_side_nav").hasClass("open_nav")) {
-      $("#my_side_nav").css({ width: "0" }).removeClass("open_nav");
-      $("#menu_icon")
-        .removeClass("fa fa-remove")
-        .addClass("fa fa-reorder");
-      $("#main_content").css({ marginLeft: "0" });
-    } else {
-      $("#my_side_nav").css({ width: "180px" }).addClass("open_nav");
-      $("#menu_icon")
-        .removeClass("fa fa-reorder")
-        .addClass("fa fa-remove");
-      $("#main_content").css({ marginLeft: "180px" });
-    }
-  });
-
+  
 
 
   $("#publish_problem_btn").click(function () {
