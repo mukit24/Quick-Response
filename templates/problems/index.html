@@ -105,44 +105,7 @@
                                 </div>
                                 <input type="submit" class="btn btn-success btn-sm mt-2" value="Submit">
                             </form>
-                            <script>
-                                $(document).ready(function () {
-                                    $('#id_title').removeAttr('required');
-                                    $("#search_tag_input").on("keyup", function () {
-                                        var value = $(this).val().toLowerCase();
-                                        $("#tag_list_modal label").filter(function () {
-                                            $(this).toggle(
-                                                $(this).text().toLowerCase().indexOf(value) > -1
-                                            );
-                                        });
-                                    });
 
-                                    $("#tag_list_modal label")
-                                        .find("input[type=checkbox]")
-                                        .click(function () {
-                                            if ($(this).prop("checked") == true) {
-                                                var value = $(this).parent().text();
-                                                $("#search_tag_input").before(
-                                                    '<h6 class="d-inline-block mx-1"><span class="badge badge-info">' +
-                                                    value +
-                                                    "</span></h6>"
-                                                );
-                                            } else {
-                                                console.log('test');
-                                                var value = $(this).parent().text();
-                                                console.log(value)
-                                                $("#tag_list_form")
-                                                    .siblings("h6")
-                                                    .each(function () {
-                                                        console.log($(this).text());
-                                                        if ($(this).text() == value) {
-                                                            $(this).remove();
-                                                        }
-                                                    });
-                                            }
-                                        });
-                                });
-                            </script>
                         </div>
 
                         <!-- Modal footer -->
@@ -196,7 +159,7 @@
                                 {% endfor %}
                             </div>
                             <div class="col-5 text-right">
-                                <h6 style="font-size: small">
+                                <h6 style="font-size: small" class="publish_at">
                                     Published At {{problem.created_on}} By <a style="text-decoration: none;"
                                         href="{% url 'profile_view' problem.author.id %}">{{problem.author}}</a>
                                 </h6>

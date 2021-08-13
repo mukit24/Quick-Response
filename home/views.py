@@ -97,4 +97,8 @@ def notification_op(request,id):
     # print(noti.target_object_id)
     noti.mark_as_read()
     return redirect('problem_details',noti.target.id)
+
+
+# def page_not_found_view(request, exception):
+#     return render(request, '404.html', status=404)
             

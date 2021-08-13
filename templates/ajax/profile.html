@@ -1,6 +1,6 @@
 <script>
-     // change password
-  $('#change_pass').submit(function (e) {
+  // change password
+  $("#change_pass").submit(function (e) {
     e.preventDefault();
     $.ajax({
       url: "{% url 'change_password' %}",
@@ -8,24 +8,26 @@
       data: $(this).serialize(),
       success: function (data) {
         console.log(data);
-        if (data['status'] == 'success') {
-          console.log('yooo');
-          var output = '<p class="alert alert-success font-weight-bold">Password Successfully Changed</p>';
-          $('#pass_form_errors').append(output);
-          $('#change_pass').trigger('reset');
-        }
-        else {
+        if (data["status"] == "success") {
+          console.log("yooo");
+          var output =
+            '<p class="alert alert-success font-weight-bold">Password Successfully Changed</p>';
+          $("#pass_form_errors").append(output);
+          $("#change_pass").trigger("reset");
+        } else {
           var i, j;
           for (i in data) {
             for (j in data[i]) {
               //   console.log(data[i][j]);
-              var output = '<p class="alert alert-danger alert-dismissible font-weight-bold"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>' + data[i][j] + '</p>';
-              $('#pass_form_errors').append(output);
+              var output =
+                '<p class="alert alert-danger alert-dismissible font-weight-bold"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>' +
+                data[i][j] +
+                "</p>";
+              $("#pass_form_errors").append(output);
             }
           }
         }
-      }
-    })
-  })
-
+      },
+    });
+  });
 </script>

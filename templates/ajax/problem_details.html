@@ -1,48 +1,66 @@
 <script>
-  // comment
-    $('.submit_cmt_p').click(function(e){
+  // submit comment
+  $(".submit_cmt_p").click(function (e) {
     e.preventDefault();
-    var form = $(this).closest('form');
+    var form = $(this).closest("form");
     $.ajax({
-      'url': "{% url 'comment_problem' problem.id %}",
-      'method': "POST",
+      url: "{% url 'comment_problem' problem.id %}",
+      method: "POST",
       data: $(form).serialize(),
       success: function (data) {
-        $('#cmt_noti').empty();
-        if (data['status']=='success'){
-        console.log(data);
-        var output,prefix = data.comment_data;
-        console.log(data.comment_data)
-        my_date = new Date(prefix.date)
-        output = '<div id="cmt_content"><p class="py-1 pl-2 m-0 d-inline"><span id="cmt_body">'+prefix.c_body+'</span> | <a href="" style="text-decoration: none;font-weight: 500;">'+prefix.author+'</a> <span class="text-muted">'+my_date.toLocaleString('en-US', { day:'numeric',month:'long',year:'numeric',hour: 'numeric', minute: 'numeric', hour12: true })+'</span></p><div class="d-inline" style="position: absolute;right: 0;"><a href="" data-toggle="tooltip" title="Delete" id="cmt_dlt_btn" data-sid ='+prefix.id+'><i class="fa fa-trash text-danger"></i></a><a class="ml-1" href="" data-toggle="tooltip" title="Edit" id="cmt_edit_open" data-sid ='+prefix.id+'><i class="fa fa-pencil-square-o text-primary"></i></a></div><hr class="m-0"></div>';
-        console.log(output);
-        $('#cmt_form_p').hide();
-        $(output).hide().appendTo("#cmt_p_list").fadeIn(1000);
-        $('#cmt_btn_cls').hide();
-        }else if(data['status']=='fail')
-        {
-          msg = '<p class="alert alert-danger font-weight-bold py-1">Sorry You Have To Login First</p>'
-          $('#cmt_noti').empty();
+        $("#cmt_noti").empty();
+        if (data["status"] == "success") {
+          console.log(data);
+          var output,
+            prefix = data.comment_data;
+          console.log(data.comment_data);
+          my_date = new Date(prefix.date);
+          output =
+            '<div id="cmt_content"><p class="py-1 pl-2 m-0 d-inline"><span id="cmt_body">' +
+            prefix.c_body +
+            '</span> | <a href="" style="text-decoration: none;font-weight: 500;">' +
+            prefix.author +
+            '</a> <span class="text-muted">' +
+            my_date.toLocaleString("en-US", {
+              day: "numeric",
+              month: "long",
+              year: "numeric",
+              hour: "numeric",
+              minute: "numeric",
+              hour12: true,
+            }) +
+            '</span></p><div class="d-inline" style="position: absolute;right: 0;"><a href="" data-toggle="tooltip" title="Delete" id="cmt_dlt_btn" data-sid =' +
+            prefix.id +
+            '><i class="fa fa-trash text-danger"></i></a><a class="ml-1" href="" data-toggle="tooltip" title="Edit" id="cmt_edit_open" data-sid =' +
+            prefix.id +
+            '><i class="fa fa-pencil-square-o text-primary"></i></a></div><hr class="m-0"></div>';
+          console.log(output);
+          $("#cmt_form_p").hide();
+          $(output).hide().appendTo("#cmt_p_list").fadeIn(1000);
+          $("#cmt_btn_cls").hide();
+        } else if (data["status"] == "fail") {
+          msg =
+            '<p class="alert alert-danger font-weight-bold py-1">Sorry You Have To Login First</p>';
+          $("#cmt_noti").empty();
           $(msg).hide().appendTo("#cmt_noti").fadeIn("slow");
-        }else{
-          $('#cmt_noti').empty();
-            var output = '<p class="alert alert-danger py-1 font-weight-bold">This Field Is Required</p>';
-            $(output).hide().appendTo("#cmt_noti").fadeIn("slow");
-            
+        } else {
+          $("#cmt_noti").empty();
+          var output =
+            '<p class="alert alert-danger py-1 font-weight-bold">This Field Is Required</p>';
+          $(output).hide().appendTo("#cmt_noti").fadeIn("slow");
         }
-        
-      }
-    })
-  })
+      },
+    });
+  });
 
   // delete cmmt
-  $('#cmt_p_list').on('click','#cmt_dlt_btn',function(e){
+  $("#cmt_p_list").on("click", "#cmt_dlt_btn", function (e) {
     e.preventDefault();
-    $('#cmt_noti').empty();
-    var id = $(this).attr('data-sid');
+    $("#cmt_noti").empty();
+    var id = $(this).attr("data-sid");
     my_data = {
-      sid:id,    
-    }
+      sid: id,
+    };
     var mythis = this;
 
     $.ajax({
@@ -50,149 +68,154 @@
       url: "{% url 'delete_comment' %}",
       data: my_data,
       success: function (data) {
-        $(mythis).closest('#cmt_content').fadeOut(500);
-      }
+        $(mythis).closest("#cmt_content").fadeOut(500);
+      },
     });
-  })
+  });
 
   //edit comment
-  $('.edit_cmt_p').click(function(e){
+  $(".edit_cmt_p").click(function (e) {
     e.preventDefault();
-    $('#cmt_noti').empty();
-    var form = $(this).closest('form');
+    $("#cmt_noti").empty();
+    var form = $(this).closest("form");
     $.ajax({
-      'url': "{% url 'edit_comment_problem' %}",
-      'method': "POST",
+      url: "{% url 'edit_comment_problem' %}",
+      method: "POST",
       data: $(form).serialize(),
       success: function (data) {
-        if(data['status']=='success'){
+        if (data["status"] == "success") {
           console.log(data);
-        var output = data.edit_data.c_body;
-        var up_cmt = $('#cmt_p_list').find('a[data-sid='+data.edit_data.id+']').closest('#cmt_content').find('#cmt_body');
+          var output = data.edit_data.c_body;
+          var up_cmt = $("#cmt_p_list")
+            .find("a[data-sid=" + data.edit_data.id + "]")
+            .closest("#cmt_content")
+            .find("#cmt_body");
 
-        $(up_cmt).fadeOut(function() {
+          $(up_cmt).fadeOut(function () {
             $(this).text(output).fadeIn();
-        });
-        
-        $('#cmt_btn_cls').hide();
-        $('#cmt_form_p').hide();
-        }else{
-          $('#cmt_noti').empty();
-            var output = '<p class="alert alert-danger py-1 font-weight-bold">This Field Can Not Be Blanked</p>';
-            $(output).hide().appendTo("#cmt_noti").fadeIn("slow");
-            
-        }
-        
-        
-      },
-    })
-  })
+          });
 
-  //comment solution
-  // $('#cmt_solution').submit(function(e){
-  //   e.preventDefault();
-  //   console.log('clicked');
-  // })
+          $("#cmt_btn_cls").hide();
+          $("#cmt_form_p").hide();
+        } else {
+          $("#cmt_noti").empty();
+          var output =
+            '<p class="alert alert-danger py-1 font-weight-bold">This Field Can Not Be Blanked</p>';
+          $(output).hide().appendTo("#cmt_noti").fadeIn("slow");
+        }
+      },
+    });
+  });
 
   //upvote
-  $('body').on('click','#upvote_btn',function(e){
+  $("body").on("click", "#upvote_btn", function (e) {
     e.preventDefault();
-    console.log('yo');
-    sol_id = $(this).attr('data-sid');
+    console.log("yo");
+    sol_id = $(this).attr("data-sid");
     let mythis = this;
     my_data = {
-      id:sol_id
-    }
+      id: sol_id,
+    };
     $.ajax({
-      'url': '{% url "upvote" %}',
-      'method':"GET",
-      'data':my_data,
-      success: function(data){
-        $('.vote_noti').empty();
-        if(data['status']=='success'){
+      url: '{% url "upvote" %}',
+      method: "GET",
+      data: my_data,
+      success: function (data) {
+        $(".vote_noti").empty();
+        if (data["status"] == "success") {
           var val = parseInt($(mythis).next().text());
-          $(mythis).next().text(val+1);
-          var msg = '<p class="alert alert-success alert-dismissible font-weight-bold text-center d-block"><button type="button" class="close"data-dismiss="alert">&times;</button>Your Up Vote Is Successfully Submitted</p>';
-          $('.vote_noti').html(msg).animate({'top':'30%'},'slow');
-        }else if(data['status']=='fail'){
-        var msg = '<p class="alert alert-danger alert-dismissible font-weight-bold text-center d-block"><button type="button" class="close"data-dismiss="alert">&times;</button>Sorry! You Have Already Submitted A Vote</p>';
-            $('.vote_noti').html(msg).animate({'top':'30%'},'slow');
-      }else if(data['status']=='self_sol'){
-        var msg = '<p class="alert alert-primary alert-dismissible font-weight-bold text-center d-block"><button type="button" class="close"data-dismiss="alert">&times;</button>Sorry! You Can\'t Vote On Your Own Solution</p>';
-            $('.vote_noti').html(msg).animate({'top':'30%'},'slow');
-      }
-      else{
-        var msg = '<p class="alert alert-danger alert-dismissible font-weight-bold text-center d-block"><button type="button" class="close"data-dismiss="alert">&times;</button>Sorry! Please Login First</p>';
-            $('.vote_noti').html(msg).animate({'top':'30%'},'slow');
-      }
-      }
-    })
-  })
+          $(mythis)
+            .next()
+            .text(val + 1);
+          var msg =
+            '<p class="alert alert-success alert-dismissible font-weight-bold text-center d-block"><button type="button" class="close"data-dismiss="alert">&times;</button>Your Up Vote Is Successfully Submitted</p>';
+          $(".vote_noti").html(msg).animate({ top: "30%" }, "slow");
+        } else if (data["status"] == "fail") {
+          var msg =
+            '<p class="alert alert-danger alert-dismissible font-weight-bold text-center d-block"><button type="button" class="close"data-dismiss="alert">&times;</button>Sorry! You Have Already Submitted A Vote</p>';
+          $(".vote_noti").html(msg).animate({ top: "30%" }, "slow");
+        } else if (data["status"] == "self_sol") {
+          var msg =
+            '<p class="alert alert-primary alert-dismissible font-weight-bold text-center d-block"><button type="button" class="close"data-dismiss="alert">&times;</button>Sorry! You Can\'t Vote On Your Own Solution</p>';
+          $(".vote_noti").html(msg).animate({ top: "30%" }, "slow");
+        } else {
+          var msg =
+            '<p class="alert alert-danger alert-dismissible font-weight-bold text-center d-block"><button type="button" class="close"data-dismiss="alert">&times;</button>Sorry! Please Login First</p>';
+          $(".vote_noti").html(msg).animate({ top: "30%" }, "slow");
+        }
+      },
+    });
+  });
 
   //down vote
-  $('body').on('click','#downvote_btn',function(e){
+  $("body").on("click", "#downvote_btn", function (e) {
     e.preventDefault();
-    console.log('yo');
-    sol_id = $(this).attr('data-sid');
-    console.log(this)
+    console.log("yo");
+    sol_id = $(this).attr("data-sid");
+    console.log(this);
     let mythis = this;
     my_data = {
-      id:sol_id
-    }
+      id: sol_id,
+    };
     $.ajax({
-      'url': '{% url "downvote" %}',
-      'method':"GET",
-      'data':my_data,
-      success: function(data){
-        if(data['status']=='success'){
-          $('.vote_noti').empty();
+      url: '{% url "downvote" %}',
+      method: "GET",
+      data: my_data,
+      success: function (data) {
+        if (data["status"] == "success") {
+          $(".vote_noti").empty();
           var val = parseInt($(mythis).prev().text());
-          $(mythis).prev().text(val-1);
-          var msg = '<p class="alert alert-success alert-dismissible font-weight-bold text-center d-block"><button type="button" class="close"data-dismiss="alert">&times;</button>Your Down Vote Is Successfully Submitted</p>';
-          $('.vote_noti').html(msg).animate({'top':'30%'},'slow');
-        }else if(data['status']=='fail'){
-        var msg = '<p class="alert alert-danger alert-dismissible font-weight-bold text-center d-block"><button type="button" class="close"data-dismiss="alert">&times;</button>Sorry! You Have Already Submitted A Vote</p>';
-            $('.vote_noti').html(msg).animate({'top':'30%'},'slow');
-      }else if(data['status']=='self_sol'){
-        var msg = '<p class="alert alert-info alert-dismissible font-weight-bold text-center d-block"><button type="button" class="close"data-dismiss="alert">&times;</button>Sorry! You Can\'t Vote On Your Own Solution</p>';
-            $('.vote_noti').html(msg).animate({'top':'30%'},'slow');
-      }
-      else{
-        var msg = '<p class="alert alert-danger alert-dismissible font-weight-bold text-center d-block"><button type="button" class="close"data-dismiss="alert">&times;</button>Sorry! Please Login First</p>';
-            $('.vote_noti').html(msg).animate({'top':'30%'},'slow');
-      }
-      }
-    })
-  })
+          $(mythis)
+            .prev()
+            .text(val - 1);
+          var msg =
+            '<p class="alert alert-success alert-dismissible font-weight-bold text-center d-block"><button type="button" class="close"data-dismiss="alert">&times;</button>Your Down Vote Is Successfully Submitted</p>';
+          $(".vote_noti").html(msg).animate({ top: "30%" }, "slow");
+        } else if (data["status"] == "fail") {
+          var msg =
+            '<p class="alert alert-danger alert-dismissible font-weight-bold text-center d-block"><button type="button" class="close"data-dismiss="alert">&times;</button>Sorry! You Have Already Submitted A Vote</p>';
+          $(".vote_noti").html(msg).animate({ top: "30%" }, "slow");
+        } else if (data["status"] == "self_sol") {
+          var msg =
+            '<p class="alert alert-info alert-dismissible font-weight-bold text-center d-block"><button type="button" class="close"data-dismiss="alert">&times;</button>Sorry! You Can\'t Vote On Your Own Solution</p>';
+          $(".vote_noti").html(msg).animate({ top: "30%" }, "slow");
+        } else {
+          var msg =
+            '<p class="alert alert-danger alert-dismissible font-weight-bold text-center d-block"><button type="button" class="close"data-dismiss="alert">&times;</button>Sorry! Please Login First</p>';
+          $(".vote_noti").html(msg).animate({ top: "30%" }, "slow");
+        }
+      },
+    });
+  });
 
   //best answer
-  $('body').on('click','#select_best_answer',function(e){
-    console.log('clicked');
-    $(this).find('i').removeClass().addClass('fa fa-star text-success');
-    $(this).removeAttr('id');
-    $('button').filter('#select_best_answer').hide();
-    sol_id = $(this).attr('data-sid');
+  $("body").on("click", "#select_best_answer", function (e) {
+    console.log("clicked");
+    $(this).find("i").removeClass().addClass("fa fa-star text-success");
+    $(this).removeAttr("id");
+    $("button").filter("#select_best_answer").hide();
+    sol_id = $(this).attr("data-sid");
     // console.log(this)
     let mythis = this;
     my_data = {
-      id:sol_id
-    }
+      id: sol_id,
+    };
 
     $.ajax({
-      'url': '{% url "best_answer" %}',
-      'method':"GET",
-      'data':my_data,
-      success: function(data){
+      url: '{% url "best_answer" %}',
+      method: "GET",
+      data: my_data,
+      success: function (data) {
         console.log(data);
-        $('.vote_noti').empty();
-        var msg = '<p class="alert alert-info alert-dismissible font-weight-bold text-center d-block"><button type="button" class="close"data-dismiss="alert">&times;</button>You Have Accepted This Solution As Best Answer</p>';
-        $('.vote_noti').html(msg).animate({'top':'30%'},'slow');
-        $('.problem_status').empty();
-        var output =  '<h6 style="font-size: small;">Status: <span class="text-success font-weight-bold">Solved</span>';
-        $('.problem_status').html(output);
-
-      }
-    })
-  })
-
+        $(".vote_noti").empty();
+        var msg =
+          '<p class="alert alert-info alert-dismissible font-weight-bold text-center d-block"><button type="button" class="close"data-dismiss="alert">&times;</button>You Have Accepted This Solution As Best Answer</p>';
+        $(".vote_noti").html(msg).animate({ top: "30%" }, "slow");
+        $(".problem_status").empty();
+        var output =
+          '<h6 style="font-size: small;">Status: <span class="text-success font-weight-bold">Solved</span>';
+        $(".problem_status").html(output);
+      },
+    });
+  });
 </script>

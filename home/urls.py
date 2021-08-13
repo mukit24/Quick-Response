@@ -10,3 +10,5 @@ urlpatterns = [
     path('points/',points_table,name='points'),
     path('notification_op/<int:id>/',notification_op,name='notification_op'),
 ]
+
+# handler404 = "home.views.page_not_found_view"

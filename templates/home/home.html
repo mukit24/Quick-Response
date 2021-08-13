@@ -6,7 +6,11 @@ background-size: cover;min-height: 60vh;margin: 0;">
 <h1 class="text-center text-light" style="font-family: var(--font-2);font-weight: 500;letter-spacing: 3px;">Welcome To Quick Response</h1>
 <h4 class="text-center text-light">A Modern Educational Platform For Solving Your Problems</h4>
 <div class="text-center">
-    <button class="btn btn-outline-success font-weight-bold">Get Started</button>
+  {% if request.user.is_authenticated %}
+  <a href="{% url 'prob_home' %}"><button class="btn btn-outline-success">Get Started</button></a>
+  {% else %}
+  <a href="{% url 'account_login' %}"><button class="btn btn-outline-success">Get Started</button></a>
+  {% endif %}
 </div>
 </div>
 <div  class="bg-light">
@@ -16,7 +20,11 @@ background-size: cover;min-height: 60vh;margin: 0;">
         <h3 style="font-family: var(--font-1);" class="text-center font-weight-bold">Quick Response Platform</h3>
         <p class="home_p">Are you stuck on a problem? Can't find the answer anywhere? Then here we are raedy to give a Quick Response in your problem. Our platform is an educational platform for solving your problems. So, don't worry and oviously don't hesitate to post your problems here. </p>
         <div class="text-center">
-          <button class="btn btn-primary btn-sm">Get Started</button>
+          {% if request.user.is_authenticated %}
+          <a href="{% url 'prob_home' %}"><button class="btn btn-primary btn-sm">Get Started</button></a>
+          {% else %}
+          <a href="{% url 'account_login' %}"><button class="btn btn-primary btn-sm">Get Started</button></a>
+          {% endif %}
         </div>
       </div>
       <div class="col-lg-4 my_fade2">
@@ -95,5 +103,26 @@ background-size: cover;min-height: 60vh;margin: 0;">
       
   </div>
      
+</div>
+<div style="background-color: rgb(189, 184, 184);">
+  <div class="container p-3 text-center">
+    <div class="row justify-content-center">
+      <div class="col-lg-6">
+        <div class="row align-items-center">
+          <div class="col-lg-5">
+            <h4 style="font-family: var(--font-1);font-weight: 600;">Contact With Us? </h4>
+        <img style="max-width: 200px; width: 100%;margin: auto;padding-bottom: 10px;" src="{% static 'images/c1.png' %}" alt="computer">
+          </div>
+          <div class="col-lg-7 text-left">
+            <h6 class=""><i class="fa fa-phone text-primary"></i> 01980492420</h6>
+            <h6 class=""><i class="fa fa-envelope text-primary"></i> quick.response1824@gmail.com</h6>
+            <h6 class=""><i class="fa fa-address-book text-primary"></i> Khulna University, Khulna</h6>
+            
+          </div>
+        </div>
+        
+      </div>
+    </div>
+    </div>
 </div>
 {% endblock %}
