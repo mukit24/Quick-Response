@@ -2,7 +2,7 @@
 {% load static %}
 {% block content %}
 {% load custom_tags %}
-<div class="text-dark" style="background-color: rgb(182, 202, 171);">
+<div class="text-dark profile_section" style="background-color: rgb(182, 202, 171);overflow-x: hidden;">
     <div class="container p-2">
         {% if profile %}
         <div class="text-center">
@@ -10,7 +10,7 @@
         </div>
         <div class="text-center bg-dark text-light mb-2 profile_data">
             <div class="row">
-                <div class="col-lg-4 p-3">
+                <div class="col-lg-4 px-3 py-2">
                     <img src="{{profile.profile_picture.url}}" style="object-fit: cover;" height="100px"
                         width="100px" />
                     <h6 class="text-light pt-1">User: {{profile.user.username}}</h6>

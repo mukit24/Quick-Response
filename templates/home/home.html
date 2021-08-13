@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
-<div class="jumbotron jumbotron-fluid" style="background: url('/static/images/b.jpg') no-repeat bottom fixed; 
+<div class="jumbotron jumbotron-fluid px-2" style="background: url('/static/images/b.jpg') no-repeat bottom fixed; 
 background-size: cover;min-height: 60vh;margin: 0;">
 <h1 class="text-center text-light" style="font-family: var(--font-2);font-weight: 500;letter-spacing: 3px;">Welcome To Quick Response</h1>
 <h4 class="text-center text-light">A Modern Educational Platform For Solving Your Problems</h4>
@@ -31,54 +31,68 @@ background-size: cover;min-height: 60vh;margin: 0;">
 </div>
 <div class="features" style="background-color: rgb(235, 232, 232);">
   <div class="container py-2">
-    <h2 class="text-center font-weight-bold pb-2" style="font-family: var(--font-1);">Features To Explore</h2>
-    <div class="row">
+    <h2 class="text-center font-weight-bold py-2" style="font-family: var(--font-1);">Features To Explore</h2>
+    <!-- <div class="row">
       <div class="col-lg-6">
         <div class="home-img text-center">
           <img style="max-width: 250px; width: 100%;" src="{% static 'images/fast_solution.png' %}" alt="computer">
       </div>
       </div>
       <div class="col-lg-6"></div>
-    </div>
-    <!-- <div class="row">
-      <div class="owl-carousel feature-carousel">
-
-          <div class="card bg-light my_fade_main">
-            <div class="card-body">
-              <h5 class="card-title font-weight-bold">Fast Solution <i class="fa fa-comment"></i></h5>
-              <p class="card-text">User can post a problem with problem type tag. Then he/she will get a solution if others are able to answer.</p>
-              
-            </div>
+    </div> -->
+    <div class="row">
+      <div class="col-lg-3">
+        <div class="card bg-transparent my_fade_main">
+          <div class="card-body">
+            
+                <img style="max-width: 80px; width: 100%;margin: auto;padding-bottom: 10px;" src="{% static 'images/fs3.png' %}" alt="computer">
+            
+            <h5 class="card-title ">Fast Solution</h5>
+            <p class="card-text">User can post a problem with problem type tag. Then he/she will get a solution if others are able to answer.</p>
+            
           </div>
+        </div>
+      </div>
+      <div class="col-lg-3">
+        <div class="card bg-transparent my_fade_main">
+          <div class="card-body">
+            <img style="max-width: 80px; width: 100%;margin: auto;padding-bottom: 10px;" src="{% static 'images/noti1.png' %}" alt="computer">
+            <h5 class="card-title ">Notifications</h5>
+            <p class="card-text">User will be notified if someone interacts with the problem/solution that user has posted.</p>
+            
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3">
+        <div class="card bg-transparent my_fade_main">
+          <div class="card-body">
+            <img style="max-width: 80px; width: 100%;margin: auto;padding-bottom: 10px;" src="{% static 'images/user_friendly.png' %}" alt="computer">
+            <h5 class="card-title ">User Freindly</h5>
+            <p class="card-text">This platform is fully user friendly and interactive. You can view as a social media.</p>
+            
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3">
+        <div class="card bg-transparent my_fade_main">
+          <div class="card-body">
+            <img style="max-width: 80px; width: 100%;margin: auto;padding-bottom: 10px;" src="{% static 'images/points.png' %}" alt="computer">
+            <h5 class="card-title ">Points</h5>
+            <p class="card-text">By getting votes, best answer on your solution will get you some points. </p>
+          </div>
+        </div>
+      </div>
         
 
-          <div class="card bg-light my_fade_main">
-            <div class="card-body">
-              <h5 class="card-title font-weight-bold">Notifications <i class="fa fa-bell"></i></h5>
-              <p class="card-text">User will be notified if someone interacts with the problem/solution that user has posted.</p>
-              
-            </div>
-          </div>
+          
         
 
-          <div class="card bg-light my_fade_main">
-            <div class="card-body">
-              <h5 class="card-title font-weight-bold">User Freindly <i class="fa fa-child"></i></h5>
-              <p class="card-text">This platform is fully user friendly and interactive. You can view as a social media that focuses on educational sector. </p>
-              
-            </div>
-          </div>
+          
         
-          <div class="card bg-light my_fade_main">
-            <div class="card-body">
-              <h5 class="card-title font-weight-bold">Points <i class="fa fa-star"></i></h5>
-              <p class="card-text">By getting votes, best answer on your solution will get you some points. There is a points table for showing the points.</p>
-            </div>
-          </div>
+          
         
       </div>
       
-    </div>  -->
   </div>
      
 </div>
