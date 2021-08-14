@@ -101,7 +101,7 @@ $(document).ready(function () {
       if ($(this).prop("checked") == true) {
         var value = $(this).parent().text();
         $("#myInput_tag").before(
-          '<h6 class="d-inline-block mx-1"><span class="badge badge-secondary">' +
+          '<h6 class="d-inline-block mx-1" id="tag_h6"><span class="badge badge-secondary">' +
             value +
             "</span></h6>"
         );
@@ -162,6 +162,18 @@ $(document).ready(function () {
   });
 
   //post details
+  // for edit post
+  $("#id_tag input[type=checkbox]").each(function () {
+    if (this.checked) {
+      var value = $(this).parent().text();
+      console.log(value);
+      $("#myInput_tag").before(
+        '<h6 class="d-inline-block mx-1"><span class="badge badge-secondary">' +
+          value +
+          "</span></h6>"
+      );
+    }
+  });
   // open comment form
   $("#cmt_btn").click(function () {
     $("#cmt_form_p").show().trigger("reset");

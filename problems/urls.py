@@ -1,5 +1,5 @@
 from django.urls import path,include
-from .views import prob_home,create_problem,problem_details,comment,delete_comment,edit_comment,create_solution,delete_problem,edit_problem,upvote,downvote,best_answer,test,message
+from .views import prob_home,create_problem,problem_details,comment,delete_comment,edit_comment,create_solution,delete_problem,edit_problem,upvote,downvote,best_answer
 urlpatterns = [
     path('',prob_home,name='prob_home'),
     path('create/',create_problem,name='create_problem'),

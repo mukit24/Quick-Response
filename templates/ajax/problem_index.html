@@ -60,8 +60,19 @@
             '</a></h6></div></div></div></div><hr class="bg-info my-2"/>';
 
           $(output).hide().prependTo("#problem_list").fadeIn(1500);
-          // $('#post_form').trigger('reset');
-          // CKEDITOR.instances[0] = '';
+          $('#post_form').trigger('reset');
+          for (var instance in CKEDITOR.instances)
+              CKEDITOR.instances[instance].setData('');
+          
+          $("#id_tag")
+          .siblings("h6")
+          .each(function () {
+            // console.log($(this).text());
+            if ($(this).attr('id') == 'tag_h6') {
+              $(this).remove();
+            }
+          });
+          // CKEDITOR.instances.cke_id_body.setData('');
         } else if (data["status"] == "fail") {
           console.log("fail");
           $("#post_form_noti").empty();

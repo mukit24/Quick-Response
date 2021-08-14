@@ -11,6 +11,8 @@ from functools import wraps
 from django.http import HttpResponse
 from notifications.signals import notify
 from datetime import datetime
+from notifications.models import Notification
+
 
 def profile_required(function):
     @wraps(function)
@@ -121,6 +123,12 @@ def create_problem(request):
             return JsonResponse(dict(post_form.errors.items()))
 
 def delete_problem(request,id):
+    notis =Notification.objects.all()
+    for noti in notis:
+        if noti.target.id == id:
+            noti.delete()
+            # qs = Notification.objects.get(id=noti.id)
+            # qs.mark_all_as_deleted()
     problem = Problem.objects.get(id=id)
     problem.delete()
     return redirect('prob_home')
@@ -134,7 +142,11 @@ def edit_problem(request,id):
 
 @profile_required
 def problem_details(request,id,msg=None):
-    print(msg)
+    notis =Notification.objects.all()
+    for noti in notis:
+        if noti.target.id == id:
+            print(noti)
+    # print(msg)
     problem = Problem.objects.get(id=id)
     solutions = Solution.objects.filter(problem=problem)
     sol_cnt = Solution.objects.filter(problem=problem).count()
@@ -323,9 +335,7 @@ def best_answer(request):
     return JsonResponse({'status':'success'})
 
 
-def test(request):
-    users = User.objects.all()
-    return render(request,'test.html',{'users':users,})
+
 
 def message(request):
     try:
