@@ -96,6 +96,11 @@ def create_problem(request):
     if not request.user.is_authenticated:
         print('yooooooooo')
         return JsonResponse({'status':'fail'})
+    try:
+        profile = Profile.objects.get(user=request.user)
+    except:
+        return JsonResponse({'status':'profile_required'})
+        
     if request.method == "POST":
         post_form = PostForm(request.POST)
         print(request.POST)

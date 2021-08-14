@@ -31,10 +31,24 @@
 
   <style>
    
+   @media screen and (max-width: 425px) {
+  .jumbotron {
+    min-height: 40vh !important;
+  }
+  .vote_noti {
+  position: fixed;
+  top: 0%;
+  left: 5%;
+  font-size: 10px;
+  z-index: 1000;
+}
+}
 
 
   </style>
   <script>
+
+    
 
   </script>
 </head>
@@ -62,7 +76,7 @@
     <ul class="navbar-nav ml-auto">
       <li class="nav-item">
         <a class="navbar-brand text-light" id="noti" href="#" data-toggle="tooltip" title="Notification"><i
-            class="fa fa-bell text-info"></i><sup class="{% if user.notifications.unread.count > 0 %}badge badge-danger{% else %}badge badge-success{% endif %}" style="padding: 2px">{{user.notifications.unread.count}}</sup></a>
+            class="fa fa-bell text-info"></i><sup class="{% if request.user.notifications.unread.count > 0 %}badge badge-danger{% else %}badge badge-success{% endif %}" style="padding: 2px">{{request.user.notifications.unread.count}}</sup></a>
       </li>
     </ul>
   </nav>
@@ -95,13 +109,13 @@
   <div id="slide_noti" class="bg-dark text-light">
     <div class="text-center">
       <button class="btn btn-info m-2 font-weight-bold py-1">
-        Notifications <span class="{% if user.notifications.unread.count > 0 %}badge badge-danger{% else %}badge badge-success{% endif %}">{{user.notifications.unread.count}}</span>
+        Notifications <span class="{% if request.user.notifications.unread.count > 0 %}badge badge-danger{% else %}badge badge-success{% endif %}">{{request.user.notifications.unread.count}}</span>
       </button>
     </div>
 
 
     <!-- noti testing -->
-    {% for notification in user.notifications.unread %}
+    {% for notification in request.user.notifications.unread %}
     <a href="{% url 'notification_op' notification.id %}" style="text-decoration: none;">
       <div class="alert alert-danger mb-1 m-2">
         <p class="mb-0"><b>{{ notification.actor }}</b> {{ notification.verb }} <small style="display: block;text-align: right;">{{notification.timestamp}}</small></p>
@@ -109,7 +123,7 @@
     </a>
     
     {% endfor %}
-    {% for notification in user.notifications.read %}
+    {% for notification in request.user.notifications.read %}
     <a href="/problems/{{notification.target.id}}/details/" style="text-decoration: none;">
       <div class="alert alert-success mb-1 m-2">
         <p class="mb-0"><b>{{ notification.actor }}</b> {{ notification.verb }} <small style="display: block;text-align: right;">{{notification.timestamp}}</small></p>
