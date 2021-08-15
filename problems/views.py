@@ -99,7 +99,7 @@ def create_problem(request):
     try:
         profile = Profile.objects.get(user=request.user)
     except:
-        return JsonResponse({'status':'profile_required'})
+        return JsonResponse({'status':'profile_required','user_id':request.user.id})
         
     if request.method == "POST":
         post_form = PostForm(request.POST)
@@ -204,7 +204,9 @@ def comment(request,id):
                 new_cmt.problem = problem
                 new_cmt.save()
                 form.save_m2m()
-                notify.send(sender=request.user, recipient=problem.author, verb='Has commented on your problem',target=problem,timestamp=datetime.now())
+                if request.user != problem.author:
+                    notify.send(sender=request.user, recipient=problem.author, verb='Has commented on your problem',target=problem,timestamp=datetime.now())
+                
 
                 data = {
                 'id':new_cmt.id,

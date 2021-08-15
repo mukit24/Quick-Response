@@ -80,10 +80,10 @@
             '<p class="alert alert-danger alert-dismissible font-weight-bold text-center"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a> Sorry You Have To Login First</p>';
           $(output).hide().appendTo("#post_form_noti").fadeIn("slow");
         }else if (data["status"] == "profile_required") {
-          console.log("fail");
+          console.log("profile_req");
           $("#post_form_noti").empty();
           var output =
-            '<p class="alert alert-danger alert-dismissible font-weight-bold text-center"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a> Sorry You Have To Create Profile First.. Go To Menu and Click On Your Username..</p>';
+            '<p class="alert alert-danger alert-dismissible font-weight-bold text-center"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a> Sorry You Have To Create Profile First.. <a href="/'+data["user_id"]+'/profile/">Click Here</a></p>';
           $(output).hide().appendTo("#post_form_noti").fadeIn("slow");
         } else {
           console.log("error");
