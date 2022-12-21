@@ -1,6 +1,6 @@
 ## Quick Response is a platform which will help you to solve your problems
 ## Live Demo: https://quickresponse.pythonanywhere.com/
-#### N.B: If you want a quick look (without wasting time in authentication and profile creation) then you can use ***mukit24*** as username and ***admin_24*** as password while logging
+#### N.B: If you want a quick look (without wasting time in authentication and profile creation) then you can use ***mukit24*** as username and ***admin_24*** as password while login
 ## Major Functionality
 * ### Authentication (also with Google)
 * ### Profile
