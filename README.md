@@ -11,6 +11,6 @@
 * ### Upvote,Downvote and Select best Answer
 * ### No page load in some major places
 * ### Points Table
-### Language and Technologies: Django, Ajax, Jquery, Bootstrap
+### Language and Technologies: Django, Ajax, Jquery, Bootstrap, Python
 
 
